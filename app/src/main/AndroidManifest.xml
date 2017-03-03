@@ -21,7 +21,8 @@
         <activity
             android:name=".activities.AddNewFriend"
             android:label="@string/title_activity_add_new_friend"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName="com.example.bcr6.assignment1.MainActivity"/>
     </application>
 
 </manifest>

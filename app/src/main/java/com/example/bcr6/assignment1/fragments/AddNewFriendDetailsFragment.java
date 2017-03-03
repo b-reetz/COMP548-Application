@@ -53,23 +53,7 @@ public class AddNewFriendDetailsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.add_new_friend_details_fragment, container, false);
-        EditText firstName = (EditText) container.findViewById(R.id.add_new_friend_details_first_name_edit_text);
-        EditText lastName = (EditText) container.findViewById(R.id.add_new_friend_details_last_name_edit_text);
-        EditText mobileNumber = (EditText) container.findViewById(R.id.add_new_friend_details_mobile_number_edit_text);
-        EditText emailAddress = (EditText) container.findViewById(R.id.add_new_friend_details_email_edit_text);
-        EditText address = (EditText) container.findViewById(R.id.add_new_friend_details_address_edit_text);
-
-        firstName.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-        if (savedInstanceState != null && savedInstanceState.containsKey(AddNewFriend.FIRST_NAME)) {
-            firstName.setText(savedInstanceState.getString(AddNewFriend.FIRST_NAME));
-            lastName.setText(savedInstanceState.getString(AddNewFriend.LAST_NAME));
-            mobileNumber.setText(savedInstanceState.getString(AddNewFriend.MOBILE_NUMBER));
-            emailAddress.setText(savedInstanceState.getString(AddNewFriend.EMAIL_ADDRESS));
-            address.setText(savedInstanceState.getString(AddNewFriend.ADDRESS));
-        }
-        // Inflate the layout for this fragment
-        return view;
+        return inflater.inflate(R.layout.add_new_friend_details_fragment, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

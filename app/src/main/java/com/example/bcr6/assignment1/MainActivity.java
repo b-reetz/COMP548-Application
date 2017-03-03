@@ -19,25 +19,12 @@ import com.example.bcr6.assignment1.fragments.MainActivityFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-/*        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.main_recycler_view);
-        fragmentManager = getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        MainActivityFragment mainActivityFragment = new MainActivityFragment();
-        mainActivityFragment.setArguments(new Bundle());
-        fragmentTransaction.replace(R.id.main_fragment_container, mainActivityFragment).commit();*/
-
-
-
-
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

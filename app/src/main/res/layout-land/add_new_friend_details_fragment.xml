@@ -22,7 +22,7 @@
             android:hint="@string/first_name_hint"
             android:inputType="textPersonName|textCapWords"
             android:maxLines="1"
-            android:imeOptions="actionNext"/>
+            android:imeOptions="actionNext|flagNoExtractUi"/>
     </LinearLayout>
 
     <LinearLayout
@@ -41,7 +41,7 @@
             android:hint="@string/last_name_hint"
             android:inputType="textPersonName|textCapWords"
             android:maxLines="1"
-            android:imeOptions="actionNext"/>
+            android:imeOptions="actionNext|flagNoExtractUi"/>
     </LinearLayout>
 
     <LinearLayout
@@ -62,7 +62,7 @@
             android:maxLines="1"
             android:digits="0123456789-+()*# "
             android:inputType="phone"
-            android:imeOptions="actionNext"/>
+            android:imeOptions="actionNext|flagNoExtractUi"/>
     </LinearLayout>
 
     <LinearLayout
@@ -82,7 +82,7 @@
             android:hint="@string/email_hint"
             android:inputType="textEmailAddress"
             android:maxLines="2"
-            android:imeOptions="actionNext"/>
+            android:imeOptions="actionNext|flagNoExtractUi"/>
     </LinearLayout>
 
     <LinearLayout
@@ -103,7 +103,7 @@
             android:maxLines="4"
             android:lines="4"
             android:inputType="textPostalAddress"
-            android:imeOptions="actionDone"/>
+            android:imeOptions="actionDone|flagNoExtractUi"/>
     </LinearLayout>
 
 </LinearLayout>
