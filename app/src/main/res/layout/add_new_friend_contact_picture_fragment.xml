@@ -1,0 +1,21 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="215sp"
+    android:background="@color/cardview_dark_background"
+    tools:context="com.example.bcr6.assignment1.fragments.AddNewFriendContactPictureFragment">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="Take Picture"
+        android:background="@color/cardview_dark_background"
+        android:src="@drawable/ic_camera_alt_white_18dp"
+        android:layout_gravity="bottom|end" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="Contact picture"
+        android:src="@drawable/ic_person_white_18px"
+        android:scaleType="fitCenter"/> <!--To make the photo fill out the area-->
+</FrameLayout>
