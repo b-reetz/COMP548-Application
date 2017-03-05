@@ -4,13 +4,18 @@
     android:orientation="vertical"
     android:layout_marginTop="?attr/actionBarSize">
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/add_new_friend_contact_photo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"/>-->
+    <fragment class="com.example.bcr6.assignment1.fragments.AddNewFriendContactPictureFragment"
+        android:id="@+id/details" android:layout_width="match_parent" android:layout_height="215sp"/>
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/add_new_friend_contact_details"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"/>-->
+
+    <fragment class="com.example.bcr6.assignment1.fragments.AddNewFriendDetailsFragment"
+        android:id="@+id/details2" android:layout_width="match_parent" android:layout_height="wrap_content"/>
 </LinearLayout>

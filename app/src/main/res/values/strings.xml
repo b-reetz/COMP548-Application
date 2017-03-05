@@ -23,4 +23,6 @@
     <string name="email">Email Address</string>
     <string name="phone">Phone Number</string>
     <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="cancel">Cancel</string>
 </resources>
