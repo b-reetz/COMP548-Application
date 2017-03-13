@@ -16,6 +16,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:contentDescription="Contact picture"
-        android:src="@drawable/ic_person_white_18px"
+        android:src="@drawable/ic_person_white"
         android:scaleType="fitCenter"/> <!--To make the photo fill out the area-->
 </FrameLayout>

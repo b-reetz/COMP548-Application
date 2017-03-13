@@ -81,12 +81,7 @@ public class AddNewFriend extends AppCompatActivity implements AddNewFriendConta
         switch (item.getItemId()) {
             case R.id.action_save_contact: {
                 insertFriend();
-
                 NavUtils.navigateUpFromSameTask(this);
-                return true;
-            }
-            case R.id.action_settings: {
-                Snackbar.make(findViewById(android.R.id.content), "This is not hooked up", Snackbar.LENGTH_LONG).show();
                 return true;
             }
             default:
