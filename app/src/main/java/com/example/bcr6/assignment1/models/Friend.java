@@ -13,18 +13,25 @@ public class Friend {
 
     @DatabaseField(generatedId = true)
     private int id;
-    @DatabaseField
-    String firstName;
-    @DatabaseField
+    @DatabaseField(canBeNull = false)
+    private String firstName;
+    @DatabaseField(canBeNull = false)
     private String lastName;
-    @DatabaseField
+    @DatabaseField(canBeNull = false)
     private String mobileNumber;
-    @DatabaseField
+    @DatabaseField(canBeNull = false)
     private String emailAddress;
-    @DatabaseField
+    @DatabaseField(canBeNull = false)
     private String address;
-    @DatabaseField
+    @DatabaseField(canBeNull = false)
     private String imagePath;
+
+    /**
+     * required
+     */
+    public Friend() {
+
+    }
 
     public Friend(String firstName, String lastName, String mobileNumber, String emailAddress, String address, String imagePath) {
         this.firstName = firstName;
@@ -33,6 +40,12 @@ public class Friend {
         this.emailAddress = emailAddress;
         this.address = address;
         this.imagePath = imagePath;
+    }
+
+
+
+    public int getId() {
+        return id;
     }
 
     public String getFirstName() {
@@ -81,5 +94,10 @@ public class Friend {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public boolean isEmpty() {
+        return mobileNumber.isEmpty() && emailAddress.isEmpty() && address.isEmpty();
+
     }
 }

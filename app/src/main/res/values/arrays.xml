@@ -9,4 +9,20 @@
         <item>Take new photo</item>
         <item>Select new photo</item>
     </string-array>
+
+    <string-array name="sort_by_items">
+        <item>First name</item>
+        <item>Last name</item>
+    </string-array>
+    <string-array name="sort_order_items">
+        <item>A-Z</item>
+        <item>Z-A</item>
+    </string-array>
+
+    <string-array name="sort_by_values">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+
 </resources>

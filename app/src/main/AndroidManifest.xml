@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.bcr6.assignment1">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -21,8 +23,32 @@
         <activity
             android:name=".activities.AddNewFriend"
             android:label="@string/title_activity_add_new_friend"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName="com.example.bcr6.assignment1.MainActivity"/>
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.FriendDetail"
+            android:label="@string/title_activity_friend_detail"
+            android:launchMode="singleTop"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.Settings"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.bcr6.assignment1.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activities.EditFriend"
+            android:label="@string/title_activity_edit_friend"
+            android:parentActivityName=".activities.FriendDetail"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.bcr6.assignment1.activities.FriendDetail" />
+        </activity>
     </application>
 
 </manifest>

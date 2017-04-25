@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="250sp"
+    android:orientation="vertical"
+    tools:context="com.example.bcr6.assignment1.fragments.EditFriendDetailsFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!--TODO can this be just a drawable on the left of the editText?-->
+        <ImageView
+            android:layout_height="@dimen/add_friend_photo_margins"
+            android:layout_width="@dimen/add_friend_photo_margins"
+            android:contentDescription="@string/name"
+            android:src="@drawable/ic_person_black_24dp" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/edit_friend_details_first_name_edit_text"
+            android:hint="@string/first_name_hint"
+            android:inputType="textPersonName|textCapWords"
+            android:maxLines="1"
+            android:imeOptions="actionNext|flagNoExtractUi" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_height="@dimen/add_friend_photo_margins"
+            android:layout_width="@dimen/add_friend_photo_margins"
+            android:contentDescription="@string/name"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/edit_friend_details_last_name_edit_text"
+            android:hint="@string/last_name_hint"
+            android:inputType="textPersonName|textCapWords"
+            android:maxLines="1"
+            android:imeOptions="actionNext|flagNoExtractUi"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_height="@dimen/add_friend_photo_margins"
+            android:layout_width="@dimen/add_friend_photo_margins"
+            android:contentDescription="@string/phone"
+            android:src="@drawable/ic_phone_black_24dp"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/edit_friend_details_mobile_number_edit_text"
+            android:hint="@string/phone_hint"
+            android:maxLines="1"
+            android:digits="0123456789-+()*# "
+            android:inputType="phone"
+            android:imeOptions="actionNext|flagNoExtractUi"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_height="@dimen/add_friend_photo_margins"
+            android:layout_width="@dimen/add_friend_photo_margins"
+            android:contentDescription="@string/email"
+            android:src="@drawable/ic_email_black_24dp"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/edit_friend_details_email_edit_text"
+            android:hint="@string/email_hint"
+            android:inputType="textEmailAddress"
+            android:maxLines="2"
+            android:imeOptions="actionNext|flagNoExtractUi"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_height="@dimen/add_friend_photo_margins"
+            android:layout_width="@dimen/add_friend_photo_margins"
+            android:contentDescription="@string/address"
+            android:src="@drawable/ic_location_on_black_24dp"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/edit_friend_details_address_edit_text"
+            android:hint="@string/address_hint"
+            android:inputType="textMultiLine"
+            android:maxLines="4"
+            android:imeOptions="actionNext|flagNoExtractUi"/>
+    </LinearLayout>
+</LinearLayout>

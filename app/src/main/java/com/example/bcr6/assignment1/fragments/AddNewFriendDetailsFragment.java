@@ -1,18 +1,13 @@
 package com.example.bcr6.assignment1.fragments;
 
-import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 
 import com.example.bcr6.assignment1.R;
-import com.example.bcr6.assignment1.activities.AddNewFriend;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,17 +38,7 @@ public class AddNewFriendDetailsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.add_new_friend_details_fragment, container, false);
-        return view;
+        return inflater.inflate(R.layout.add_new_friend_details, container, false);
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
 }

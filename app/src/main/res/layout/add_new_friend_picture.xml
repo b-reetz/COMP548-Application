@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--PORTRAIT MODE-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cardview_dark_background"
+    tools:context="com.example.bcr6.assignment1.fragments.AddNewFriendContactPictureFragment"
+    android:isScrollContainer="false"
+    tools:ignore="Overdraw">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:src="@drawable/ic_photo_camera_white_24dp"
+        android:background="@color/cardview_dark_background"
+        android:contentDescription="@string/camera_image_white" />
+
+    <!--TODO make the photo fill out the area-->
+    <ImageView
+        android:id="@+id/add_new_friend_picture_silhouette"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_person_white_24dp"
+        android:scaleType="fitCenter"
+        android:contentDescription="@string/add_new_friend_photo"/>
+</FrameLayout>

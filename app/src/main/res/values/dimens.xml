@@ -4,4 +4,5 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="add_friend_photo_margins">40sp
     </dimen>
+    <dimen name="text_margin">16dp</dimen>
 </resources>
