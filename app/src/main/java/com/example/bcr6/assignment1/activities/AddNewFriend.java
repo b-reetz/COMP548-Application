@@ -230,6 +230,10 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
             iV.setScaleType(ImageView.ScaleType.CENTER_CROP);
             int height = iV.getHeight();
             int width = iV.getWidth();
+            if (width == 0)
+                width = 300;
+            if (height == 0)
+                height = 300;
             iV.setImageBitmap(ImageHelper.bitmapSmaller(imagePath, width, height));
         }
     }

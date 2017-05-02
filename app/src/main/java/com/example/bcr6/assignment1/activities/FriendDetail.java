@@ -1,29 +1,37 @@
 package com.example.bcr6.assignment1.activities;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.NavUtils;
-import android.support.v7.widget.CardView;
-import android.view.LayoutInflater;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.example.bcr6.assignment1.ImageHelper;
 import com.example.bcr6.assignment1.R;
 import com.example.bcr6.assignment1.database.DatabaseHelper;
 import com.example.bcr6.assignment1.database.ORMBaseActivity;
 import com.example.bcr6.assignment1.models.Friend;
+import com.hannesdorfmann.swipeback.Position;
+import com.hannesdorfmann.swipeback.SwipeBack;
+
+import java.io.File;
+
+import ezvcard.Ezvcard;
+import ezvcard.VCard;
+import ezvcard.property.Address;
+import ezvcard.property.StructuredName;
 
 public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
 
@@ -31,9 +39,45 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.friend_detail_activity);
+//        setContentView(R.layout.friend_detail_activity);
+
+        SwipeBack.attach(this, SwipeBack.Type.BEHIND, Position.LEFT)
+                .setContentView(R.layout.friend_detail_activity)
+                .setSwipeBackView(R.layout.swipeback_default);
+
+
+        copyToClipboardConfirmation(findViewById(R.id.friend_detail_phone));
+        copyToClipboardConfirmation(findViewById(R.id.friend_detail_address));
+        copyToClipboardConfirmation(findViewById(R.id.friend_detail_email));
 
         populateData();
+    }
+
+    private void copyToClipboardConfirmation(View v) {
+
+        v.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                final String toCopy = ((TextView) v).getText().toString();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                String[] items = {"Copy to clipboard"};
+                builder.setTitle(toCopy)
+                        .setItems(items, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (which == 0) {
+                                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                                    ClipData clip = ClipData.newPlainText("contact phone", toCopy);
+                                    clipboard.setPrimaryClip(clip);
+                                }
+
+                            }
+                        }).create().show();
+
+                return true;
+            }
+        });
     }
 
     @Override
@@ -72,6 +116,10 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
                 edit();
                 return true;
             }
+            case R.id.action_share_contact: {
+                share();
+                return true;
+            }
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
@@ -82,7 +130,10 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
     @Override
     public void onBackPressed()
     {
-        NavUtils.navigateUpFromSameTask(this);
+        super.onBackPressed();
+        overridePendingTransition(R.anim.swipeback_stack_to_front,
+                R.anim.swipeback_stack_right_out);
+//        NavUtils.navigateUpFromSameTask(this);
     }
 
     private void deleteContact() {
@@ -121,11 +172,11 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setActionBar(toolbar);
-        ActionBar actionBar = getActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle(friend.getFirstName() + " " + friend.getLastName());
-            actionBar.setDisplayHomeAsUpEnabled(true);
+        setSupportActionBar(toolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(friend.getFirstName() + " " + friend.getLastName());
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
 
@@ -180,5 +231,46 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
             } else
                 addressTV.setVisibility(View.GONE);
         }
+    }
+
+    private void share() {
+        VCard vcard = new VCard();
+        StructuredName name = new StructuredName();
+
+        name.setFamily(friend.getLastName());
+        name.setGiven(friend.getFirstName());
+        vcard.setStructuredName(name);
+
+        Address address = new Address();
+        String fullAddress = friend.getAddress();
+        String streetAddress = fullAddress.split(",")[0];
+        address.setStreetAddress(streetAddress);
+        vcard.addAddress(address);
+
+        vcard.addEmail(friend.getEmailAddress());
+
+        vcard.addTelephoneNumber(friend.getMobileNumber());
+
+        File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "test");
+        if (!f.mkdirs())
+            Log.e("SHARE", "Directory not created");
+
+
+
+        File file = new File(f.getAbsolutePath() + "/vcard.vcf");
+/*        if (!file.exists())
+            file.mkdir();*/
+        try {
+            Ezvcard.write(vcard).go(file);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        Intent sendIntent = new Intent(Intent.ACTION_SEND);
+        sendIntent.setType("text/x-vcard");
+        sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+        startActivity(sendIntent);
+
     }
 }

@@ -10,7 +10,6 @@ import android.widget.ImageView;
 
 import com.example.bcr6.assignment1.ImageHelper;
 import com.example.bcr6.assignment1.R;
-import com.example.bcr6.assignment1.activities.AddNewFriend;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -109,9 +108,14 @@ public class EditFriendContactPictureFragment extends Fragment {
 
     public void removePhoto() {
 
-        ImageView iV = (ImageView) getView().findViewById(R.id.edit_friend_picture_silhouette);
-        iV.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        iV.setImageResource(R.drawable.ic_person_white_24dp);
+
+        if (getView() != null) {
+            ImageView iV = (ImageView) getView().findViewById(R.id.edit_friend_picture_silhouette);
+            if (iV != null) {
+                iV.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                iV.setImageResource(R.drawable.ic_person_white_24dp);
+            }
+        }
         imagePath = "";
     }
 }

@@ -13,5 +13,5 @@
 
     <item android:id="@+id/action_share_contact"
         android:title="@string/share_contact"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="never"/>
 </menu>

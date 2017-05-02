@@ -33,7 +33,12 @@ import com.example.bcr6.assignment1.models.Friend;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
+import java.nio.channels.ReadableByteChannel;
 
 /**
  * Created by Brendan
@@ -218,19 +223,35 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
 
                 int column_index = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
                 cursor.moveToFirst();
-                pictureFragment.setImagePath(cursor.getString(column_index));
+
+                String url = data.getData().toString();
+                if (url.startsWith("content://com.google.android.apps.photos.content")) {
+                    InputStream is = getContentResolver().openInputStream(data.getData());
+                    pictureFragment.setImagePath(ImageHelper.createImageFile(this));
+                    int i = pictureFragment.getImagePath().lastIndexOf('/') + 1;
+                    ReadableByteChannel fis = Channels.newChannel(is);
+//                    FileOutputStream fos1 = openFileOutput(pictureFragment.getImagePath().substring(i, pictureFragment.getImagePath().length()), Context.MODE_PRIVATE);
+
+                    FileChannel fos = openFileOutput(pictureFragment.getImagePath().substring(i, pictureFragment.getImagePath().length()), Context.MODE_PRIVATE).getChannel();
+                    fos.transferFrom(fis, 0, 9999999);
+                    fos.close();
+                    fis.close();
+                } else {
+
+                    pictureFragment.setImagePath(cursor.getString(column_index));
 
 
             /* Creates FIS from selected image path, then changes imagePath to be a new empty File
                 We then copy the bytes from the selected image into the new internal image file*/
 
-                FileChannel fis = new FileInputStream(new File(pictureFragment.getImagePath())).getChannel();
-                pictureFragment.setImagePath(ImageHelper.createImageFile(this));
-                int i = pictureFragment.getImagePath().lastIndexOf('/') + 1;
-                FileChannel fos = openFileOutput(pictureFragment.getImagePath().substring(i, pictureFragment.getImagePath().length()), Context.MODE_PRIVATE).getChannel();
-                fos.transferFrom(fis, 0, fis.size());
-                fos.close();
-                fis.close();
+                    FileChannel fis = new FileInputStream(new File(pictureFragment.getImagePath())).getChannel();
+                    pictureFragment.setImagePath(ImageHelper.createImageFile(this));
+                    int i = pictureFragment.getImagePath().lastIndexOf('/') + 1;
+                    FileChannel fos = openFileOutput(pictureFragment.getImagePath().substring(i, pictureFragment.getImagePath().length()), Context.MODE_PRIVATE).getChannel();
+                    fos.transferFrom(fis, 0, fis.size());
+                    fos.close();
+                    fis.close();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {

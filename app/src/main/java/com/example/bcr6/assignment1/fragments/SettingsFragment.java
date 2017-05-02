@@ -2,9 +2,6 @@ package com.example.bcr6.assignment1.fragments;
 
 import android.preference.PreferenceFragment;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.bcr6.assignment1.R;
 

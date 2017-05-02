@@ -100,11 +100,4 @@ public class MainFragment extends Fragment {
         // TODO: Update argument type and name
         void onListFragmentInteraction(int id);
     }
-
-/*    @Override
-    public void onResume() {
-        super.onResume();
-        adapter.notifyDataSetChanged();
-    }*/
-
 }

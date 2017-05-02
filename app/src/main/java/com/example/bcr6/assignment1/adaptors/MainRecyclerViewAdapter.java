@@ -2,7 +2,6 @@ package com.example.bcr6.assignment1.adaptors;
 
 import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +12,12 @@ import com.example.bcr6.assignment1.R;
 import com.example.bcr6.assignment1.fragments.MainFragment.OnListFragmentInteractionListener;
 import com.example.bcr6.assignment1.models.Friend;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static android.content.ContentValues.TAG;
 import static com.example.bcr6.assignment1.activities.Settings.SORT_A_Z;
 import static com.example.bcr6.assignment1.activities.Settings.SORT_BY;
 import static com.example.bcr6.assignment1.activities.Settings.SORT_FIRST;
@@ -28,9 +25,7 @@ import static com.example.bcr6.assignment1.activities.Settings.SORT_LAST;
 import static com.example.bcr6.assignment1.activities.Settings.SORT_ORDER;
 import static com.example.bcr6.assignment1.activities.Settings.SORT_Z_A;
 
-/**
- * TODO: Replace the implementation with code for your data type.
- */
+
 public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerViewAdapter.FriendViewHolder> implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private final List<Friend> friends;
@@ -41,13 +36,13 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
         mListener = listener;
     }
 
-    public class FriendViewHolder extends RecyclerView.ViewHolder {
-        public final CircleImageView contactPhoto;
-        public final TextView contactName;
+    class FriendViewHolder extends RecyclerView.ViewHolder {
+        final CircleImageView contactPhoto;
+        final TextView contactName;
         public final View item;
-        public int contactID;
+        int contactID;
 
-        public FriendViewHolder(View view) {
+        FriendViewHolder(View view) {
             super(view);
             contactPhoto = (CircleImageView) view.findViewById(R.id.main_contact_image);
             contactName = (TextView) view.findViewById(R.id.main_contact_name);
@@ -67,7 +62,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
         Friend f = friends.get(position);
         holder.contactID = f.getId();
         holder.contactName.setText(f.getFirstName() +" "+ f.getLastName());
-        if (f.getImagePath() != null)
+        if (!f.getImagePath().isEmpty())
             holder.contactPhoto.setImageBitmap(ImageHelper.bitmapSmaller(f.getImagePath(), 200, 200));
 
         holder.item.setOnClickListener(new View.OnClickListener() {
@@ -88,19 +83,12 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
         return friends.size();
     }
 
-    //TODO this update doesn't work.. why
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         int sort_by = Integer.parseInt(sharedPreferences.getString(SORT_BY, SORT_FIRST+""));
         int sort_order = Integer.parseInt(sharedPreferences.getString(SORT_ORDER, SORT_A_Z+""));
 
         updateFriends(sort_by, sort_order);
-
-        /*List<Friend> temp = new ArrayList<>();
-        temp.addAll(friends);
-        friends.clear();
-        friends.addAll(temp);*/
-
         notifyDataSetChanged();
     }
 
