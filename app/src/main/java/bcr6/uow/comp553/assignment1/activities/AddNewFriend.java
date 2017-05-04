@@ -1,4 +1,4 @@
-package com.example.bcr6.assignment1.activities;
+package bcr6.uow.comp553.assignment1.activities;
 
 import android.Manifest;
 import android.app.Activity;
@@ -22,13 +22,13 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.example.bcr6.assignment1.ImageHelper;
-import com.example.bcr6.assignment1.R;
-import com.example.bcr6.assignment1.database.DatabaseHelper;
-import com.example.bcr6.assignment1.database.ORMBaseActivity;
-import com.example.bcr6.assignment1.fragments.AddNewFriendContactPictureFragment;
-import com.example.bcr6.assignment1.fragments.AddNewFriendDetailsFragment;
-import com.example.bcr6.assignment1.models.Friend;
+import bcr6.uow.comp553.assignment1.ImageHelper;
+import bcr6.uow.comp553.assignment1.R;
+import bcr6.uow.comp553.assignment1.database.DatabaseHelper;
+import bcr6.uow.comp553.assignment1.database.ORMBaseActivity;
+import bcr6.uow.comp553.assignment1.fragments.AddNewFriendContactPictureFragment;
+import bcr6.uow.comp553.assignment1.fragments.AddNewFriendDetailsFragment;
+import bcr6.uow.comp553.assignment1.models.Friend;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -44,12 +44,10 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_SELECT = 2;
     private static final int API_LEVEL = android.os.Build.VERSION.SDK_INT;
-    private static String[] PERMISSIONS_STORAGE = {
+    private static final String[] PERMISSIONS_STORAGE = {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
 
-    AddNewFriendContactPictureFragment pictureFragment;
-    AddNewFriendDetailsFragment detailsFragment;
     private String imagePath = "";
 
     @Override
@@ -68,17 +66,15 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
         if (savedInstanceState == null) {
             Log.d("t", "Building picture fragment");
 
-            pictureFragment = AddNewFriendContactPictureFragment.newInstance();
-            detailsFragment = AddNewFriendDetailsFragment.newInstance();
+            AddNewFriendContactPictureFragment pictureFragment = AddNewFriendContactPictureFragment.newInstance();
+            AddNewFriendDetailsFragment detailsFragment = AddNewFriendDetailsFragment.newInstance();
 
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.add_new_contact_picture_container, pictureFragment, "PICTURE");
+            fragmentTransaction.replace(R.id.add_new_contact_picture_container, pictureFragment);
             fragmentTransaction.replace(R.id.add_new_contact_details_container, detailsFragment);
             fragmentTransaction.commit();
-        } else if (savedInstanceState.containsKey("IMAGE")) {
+        } else if (savedInstanceState.containsKey("IMAGE"))
             imagePath = savedInstanceState.getString("IMAGE");
-            pictureFragment = (AddNewFriendContactPictureFragment) getFragmentManager().findFragmentByTag("PICTURE");
-        }
     }
 
 
@@ -88,7 +84,6 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
      */
     @Override
     public void onSaveInstanceState(Bundle out) {
-        out.putBoolean("SET", true);
         out.putString("IMAGE", imagePath);
         super.onSaveInstanceState(out);
     }

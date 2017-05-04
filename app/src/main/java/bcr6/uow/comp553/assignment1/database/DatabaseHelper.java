@@ -1,12 +1,11 @@
-package com.example.bcr6.assignment1.database;
+package bcr6.uow.comp553.assignment1.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.example.bcr6.assignment1.models.Friend;
+import bcr6.uow.comp553.assignment1.models.Friend;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
-import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
@@ -27,13 +26,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     // the DAO object we use to access the Horse table
-    private Dao<Friend, Integer> friendDao = null;
     private RuntimeExceptionDao<Friend, Integer> friendRuntimeDao = null;
 
-    public DatabaseHelper(Context context) {
-//        super(context, DATABASE_NAME, null, DATABASE_VERSION, R.raw.ormlite_config);
+
+    private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
+
 
     /**
      * This is called when the database is first created. Usually you should call createTable statements here to create
@@ -48,16 +47,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             Log.e(DatabaseHelper.class.getName(), "Can't create database", e);
             throw new RuntimeException(e);
         }
-    }
-
-    /**
-     * Returns the Database Access Object (DAO) for our Database classes. It will create them or just give the cached
-     * values.
-     */
-    public Dao<Friend, Integer> getFriendDao() throws SQLException {
-        if (friendDao == null)
-            friendDao = getDao(Friend.class);
-        return friendDao;
     }
 
     /**
@@ -76,7 +65,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void close() {
         super.close();
-        friendDao = null;
         friendRuntimeDao = null;
     }
 
@@ -86,28 +74,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, ConnectionSource connectionSource, int oldVersion, int newVersion) {
-/*        try {
-            Log.i(DatabaseHelper.class.getName(), "onUpgrade");
-            TableUtils.dropTable(connectionSource, Horse.class, true);
-            TableUtils.dropTable(connectionSource, Birth.class, true);
-            // after we drop the old databases, we create the new ones
-            onCreate(db, connectionSource);
 
-
-        } catch (SQLException e) {
-            //Log.e(DatabaseHelper.class.getName(), "Can't drop databases", e);
-            throw new RuntimeException(e);
-        } */
-/*        RuntimeExceptionDao<Horse, Integer> horseDAO = getHorseDataDao();
-
-        try {
-            //Upgrading to version 3 of the database
-            if (oldVersion < 3) {
-                horseDao.executeRaw("ALTER TABLE 'horse' ADD COLUMN status INTEGER DEFAULT 0;");
-                horseDao.updateRaw("UPDATE 'horse' SET status = 1 WHERE 'birthdate makes them a foal");
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }*/
     }
 }

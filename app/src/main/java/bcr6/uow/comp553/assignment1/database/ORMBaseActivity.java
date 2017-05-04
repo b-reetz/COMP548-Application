@@ -1,4 +1,4 @@
-package com.example.bcr6.assignment1.database;
+package bcr6.uow.comp553.assignment1.database;
 
 
 import android.content.Context;

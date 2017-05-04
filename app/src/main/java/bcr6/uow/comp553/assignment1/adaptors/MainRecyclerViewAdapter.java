@@ -1,4 +1,4 @@
-package com.example.bcr6.assignment1.adaptors;
+package bcr6.uow.comp553.assignment1.adaptors;
 
 import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
@@ -7,10 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.bcr6.assignment1.ImageHelper;
-import com.example.bcr6.assignment1.R;
-import com.example.bcr6.assignment1.fragments.MainFragment.OnListFragmentInteractionListener;
-import com.example.bcr6.assignment1.models.Friend;
+import bcr6.uow.comp553.assignment1.ImageHelper;
+import bcr6.uow.comp553.assignment1.R;
+import bcr6.uow.comp553.assignment1.fragments.MainFragment.OnListFragmentInteractionListener;
+import bcr6.uow.comp553.assignment1.models.Friend;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -18,12 +18,12 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static com.example.bcr6.assignment1.activities.Settings.SORT_A_Z;
-import static com.example.bcr6.assignment1.activities.Settings.SORT_BY;
-import static com.example.bcr6.assignment1.activities.Settings.SORT_FIRST;
-import static com.example.bcr6.assignment1.activities.Settings.SORT_LAST;
-import static com.example.bcr6.assignment1.activities.Settings.SORT_ORDER;
-import static com.example.bcr6.assignment1.activities.Settings.SORT_Z_A;
+import static bcr6.uow.comp553.assignment1.activities.Settings.SORT_A_Z;
+import static bcr6.uow.comp553.assignment1.activities.Settings.SORT_BY;
+import static bcr6.uow.comp553.assignment1.activities.Settings.SORT_FIRST;
+import static bcr6.uow.comp553.assignment1.activities.Settings.SORT_LAST;
+import static bcr6.uow.comp553.assignment1.activities.Settings.SORT_ORDER;
+import static bcr6.uow.comp553.assignment1.activities.Settings.SORT_Z_A;
 
 
 public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerViewAdapter.FriendViewHolder> implements SharedPreferences.OnSharedPreferenceChangeListener {

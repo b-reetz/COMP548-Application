@@ -1,7 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="EntryPointsManager">
-    <entry_points version="2.0" />
+    <entry_points version="2.0">
+      <entry_point TYPE="class" FQNAME="com.example.bcr6.assignment1.fragments.AddNewFriendContactPictureFragment" />
+      <entry_point TYPE="class" FQNAME="com.example.bcr6.assignment1.fragments.AddNewFriendDetailsFragment" />
+      <entry_point TYPE="class" FQNAME="com.example.bcr6.assignment1.database.DatabaseHelper" />
+      <entry_point TYPE="implicit.constructor" FQNAME="com.example.bcr6.assignment1.activities.EditFriend" />
+      <entry_point TYPE="method" FQNAME="com.example.bcr6.assignment1.fragments.EditFriendContactPictureFragment EditFriendContactPictureFragment()" />
+      <entry_point TYPE="class" FQNAME="com.example.bcr6.assignment1.fragments.EditFriendContactPictureFragment" />
+      <entry_point TYPE="method" FQNAME="com.example.bcr6.assignment1.fragments.EditFriendDetailsFragment EditFriendDetailsFragment()" />
+      <entry_point TYPE="class" FQNAME="com.example.bcr6.assignment1.fragments.EditFriendDetailsFragment" />
+      <entry_point TYPE="method" FQNAME="com.example.bcr6.assignment1.ExampleInstrumentedTest void useAppContext()" />
+      <entry_point TYPE="implicit.constructor" FQNAME="com.example.bcr6.assignment1.ExampleInstrumentedTest" />
+      <entry_point TYPE="method" FQNAME="com.example.bcr6.assignment1.ExampleUnitTest void addition_isCorrect()" />
+      <entry_point TYPE="implicit.constructor" FQNAME="com.example.bcr6.assignment1.ExampleUnitTest" />
+      <entry_point TYPE="method" FQNAME="com.example.bcr6.assignment1.models.Friend Friend()" />
+      <entry_point TYPE="method" FQNAME="com.example.bcr6.assignment1.models.Friend Friend(java.lang.String firstName, java.lang.String lastName, java.lang.String mobileNumber, java.lang.String emailAddress, java.lang.String address, java.lang.String imagePath)" />
+      <entry_point TYPE="class" FQNAME="com.example.bcr6.assignment1.models.Friend" />
+      <entry_point TYPE="implicit.constructor" FQNAME="com.example.bcr6.assignment1.activities.FriendDetail" />
+      <entry_point TYPE="implicit.constructor" FQNAME="com.example.bcr6.assignment1.ImageHelper" />
+      <entry_point TYPE="implicit.constructor" FQNAME="com.example.bcr6.assignment1.MainActivity" />
+      <entry_point TYPE="method" FQNAME="com.example.bcr6.assignment1.fragments.MainFragment com.example.bcr6.assignment1.fragments.MainFragment newInstance()" />
+      <entry_point TYPE="method" FQNAME="com.example.bcr6.assignment1.fragments.MainFragment MainFragment()" />
+      <entry_point TYPE="class" FQNAME="com.example.bcr6.assignment1.fragments.MainFragment" />
+      <entry_point TYPE="implicit.constructor" FQNAME="com.example.bcr6.assignment1.database.ORMBaseActivity" />
+      <entry_point TYPE="implicit.constructor" FQNAME="com.example.bcr6.assignment1.activities.Settings" />
+      <entry_point TYPE="method" FQNAME="com.example.bcr6.assignment1.fragments.SettingsFragment SettingsFragment()" />
+      <entry_point TYPE="class" FQNAME="com.example.bcr6.assignment1.fragments.SettingsFragment" />
+    </entry_points>
   </component>
   <component name="NullableNotNullManager">
     <option name="myDefaultNullable" value="android.support.annotation.Nullable" />

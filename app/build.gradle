@@ -4,7 +4,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "com.example.bcr6.assignment1"
+        applicationId "bcr6.uow.comp553.assignment1"
         minSdkVersion 23
         targetSdkVersion 25
         versionCode 1
@@ -33,6 +33,5 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.1'
     compile 'com.googlecode.ez-vcard:ez-vcard:0.10.2'
-    compile 'com.hannesdorfmann:swipeback:1.0.4'
     testCompile 'junit:junit:4.12'
 }

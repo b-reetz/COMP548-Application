@@ -1,4 +1,4 @@
-package com.example.bcr6.assignment1.fragments;
+package bcr6.uow.comp553.assignment1.fragments;
 
 import android.os.Bundle;
 import android.app.Fragment;
@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.bcr6.assignment1.R;
+import bcr6.uow.comp553.assignment1.R;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -15,10 +15,6 @@ import com.example.bcr6.assignment1.R;
  * create an instance of this fragment.
  */
 public class AddNewFriendDetailsFragment extends Fragment {
-
-    public AddNewFriendDetailsFragment() {
-        // Required empty public constructor
-    }
 
     /**
      * Use this factory method to create a new instance of

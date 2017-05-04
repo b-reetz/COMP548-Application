@@ -1,4 +1,4 @@
-package com.example.bcr6.assignment1.fragments;
+package bcr6.uow.comp553.assignment1.fragments;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -8,8 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.example.bcr6.assignment1.ImageHelper;
-import com.example.bcr6.assignment1.R;
+import bcr6.uow.comp553.assignment1.ImageHelper;
+import bcr6.uow.comp553.assignment1.R;
 
 /**
  * A simple {@link Fragment} subclass.

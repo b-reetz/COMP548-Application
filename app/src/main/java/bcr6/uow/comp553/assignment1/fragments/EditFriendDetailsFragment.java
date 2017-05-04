@@ -1,4 +1,4 @@
-package com.example.bcr6.assignment1.fragments;
+package bcr6.uow.comp553.assignment1.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.example.bcr6.assignment1.R;
-import com.example.bcr6.assignment1.models.Friend;
+import bcr6.uow.comp553.assignment1.R;
+import bcr6.uow.comp553.assignment1.models.Friend;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -18,7 +18,7 @@ import com.example.bcr6.assignment1.models.Friend;
  */
 public class EditFriendDetailsFragment extends Fragment {
 
-    Friend friend;
+    private Friend friend;
 
     public EditFriendDetailsFragment() {
         // Required empty public constructor
@@ -36,12 +36,6 @@ public class EditFriendDetailsFragment extends Fragment {
         fragment.setArguments(new Bundle());
         fragment.setRetainInstance(true);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
     }
 
     @Override

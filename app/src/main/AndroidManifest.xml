@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.bcr6.assignment1">
+    package="bcr6.uow.comp553.assignment1">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="bcr6.uow.comp553.assignment1.MainActivity"
             android:label="@string/application_title"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -21,33 +21,33 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.AddNewFriend"
+            android:name="bcr6.uow.comp553.assignment1.activities.AddNewFriend"
             android:label="@string/title_activity_add_new_friend"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="bcr6.uow.comp553.assignment1.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.FriendDetail"
+            android:name="bcr6.uow.comp553.assignment1.activities.FriendDetail"
             android:label="@string/title_activity_friend_detail"
             android:launchMode="singleTop"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="bcr6.uow.comp553.assignment1.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.Settings"
+            android:name="bcr6.uow.comp553.assignment1.activities.Settings"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="bcr6.uow.comp553.assignment1.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.bcr6.assignment1.MainActivity" />
+                android:value="bcr6.uow.comp553.assignment1.MainActivity" />
         </activity>
         <activity
-            android:name=".activities.EditFriend"
+            android:name="bcr6.uow.comp553.assignment1.activities.EditFriend"
             android:label="@string/title_activity_edit_friend"
-            android:parentActivityName=".activities.FriendDetail"
+            android:parentActivityName="bcr6.uow.comp553.assignment1.activities.FriendDetail"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.bcr6.assignment1.activities.FriendDetail" />
+                android:value="bcr6.uow.comp553.assignment1.activities.FriendDetail" />
         </activity>
     </application>
 

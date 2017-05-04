@@ -1,16 +1,11 @@
 <resources>
     <string name="app_name">Assignment1</string>
-    <string name="title_activity_main">MainActivity</string>
     <string name="settings">Settings</string>
     <string name="title_activity_add_new_friend">AddNewFriend</string>
     <string name="title_activity_friend_detail">FriendDetails</string>
     <string name="application_title">Friends</string>
     <string name="add_new_friend_toolbar_label">Add new friend</string>
 
-    <string name="main_card_view_content_description">Your friend\'s image</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!--THE ADD NEW FRIEND ACTIVITY-->
     <string name="first_name_hint">First name</string>
@@ -18,12 +13,10 @@
     <string name="phone_hint">Mobile</string>
     <string name="email_hint">Email</string>
     <string name="address_hint">Address</string>
-    <string name="field_next">Next</string>
     <string name="name">Name</string>
     <string name="address">Address</string>
     <string name="email">Email Address</string>
     <string name="phone">Phone Number</string>
-    <string name="title_activity_main2">Main2Activity</string>
 
     <string name="cancel">Cancel</string>
 
@@ -35,11 +28,14 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_settings">Settings</string>
-    <string name="action_settings">Settings</string>
 
-
+    <!--EDIT CONTACT-->
     <string name="edit_contact">Edit Contact</string>
+    <string name="save_upper">SAVE</string>
     <string name="delete_contact">Delete</string>
     <string name="share_contact">Share</string>
     <string name="title_activity_edit_friend">EditFriend</string>
+
+    <string name="add_phone_number">Add phone number</string>
+    <string name="add_email">Add email</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.bcr6.assignment1.activities;
+package bcr6.uow.comp553.assignment1.activities;
 
 import android.Manifest;
 import android.app.Activity;
@@ -23,19 +23,17 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.example.bcr6.assignment1.ImageHelper;
-import com.example.bcr6.assignment1.R;
-import com.example.bcr6.assignment1.database.DatabaseHelper;
-import com.example.bcr6.assignment1.database.ORMBaseActivity;
-import com.example.bcr6.assignment1.fragments.EditFriendContactPictureFragment;
-import com.example.bcr6.assignment1.fragments.EditFriendDetailsFragment;
-import com.example.bcr6.assignment1.models.Friend;
+import bcr6.uow.comp553.assignment1.ImageHelper;
+import bcr6.uow.comp553.assignment1.R;
+import bcr6.uow.comp553.assignment1.database.DatabaseHelper;
+import bcr6.uow.comp553.assignment1.database.ORMBaseActivity;
+import bcr6.uow.comp553.assignment1.fragments.EditFriendContactPictureFragment;
+import bcr6.uow.comp553.assignment1.fragments.EditFriendDetailsFragment;
+import bcr6.uow.comp553.assignment1.models.Friend;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
@@ -50,12 +48,12 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_SELECT = 2;
     private static final int API_LEVEL = android.os.Build.VERSION.SDK_INT;
-    private static String[] PERMISSIONS_STORAGE = {
+    private static final String[] PERMISSIONS_STORAGE = {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
 
-    EditFriendContactPictureFragment pictureFragment;
-    EditFriendDetailsFragment detailsFragment;
+    private EditFriendContactPictureFragment pictureFragment;
+    private EditFriendDetailsFragment detailsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -237,7 +235,6 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
                     fos.close();
                     fis.close();
                 } else {
-
                     pictureFragment.setImagePath(cursor.getString(column_index));
 
 
@@ -252,6 +249,7 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
                     fos.close();
                     fis.close();
                 }
+
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {

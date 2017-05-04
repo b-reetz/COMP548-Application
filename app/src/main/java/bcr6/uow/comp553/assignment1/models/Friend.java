@@ -1,4 +1,4 @@
-package com.example.bcr6.assignment1.models;
+package bcr6.uow.comp553.assignment1.models;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -8,6 +8,7 @@ import com.j256.ormlite.table.DatabaseTable;
  * Database table mapping to class
  */
 
+@SuppressWarnings("unused")
 @DatabaseTable(tableName = "friend")
 public class Friend {
 
@@ -26,9 +27,7 @@ public class Friend {
     @DatabaseField(canBeNull = false)
     private String imagePath;
 
-    /**
-     * required
-     */
+
     public Friend() {
 
     }

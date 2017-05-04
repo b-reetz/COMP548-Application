@@ -1,4 +1,4 @@
-package com.example.bcr6.assignment1.activities;
+package bcr6.uow.comp553.assignment1.activities;
 
 import android.app.AlertDialog;
 import android.content.ClipData;
@@ -18,13 +18,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.bcr6.assignment1.ImageHelper;
-import com.example.bcr6.assignment1.R;
-import com.example.bcr6.assignment1.database.DatabaseHelper;
-import com.example.bcr6.assignment1.database.ORMBaseActivity;
-import com.example.bcr6.assignment1.models.Friend;
-import com.hannesdorfmann.swipeback.Position;
-import com.hannesdorfmann.swipeback.SwipeBack;
+import bcr6.uow.comp553.assignment1.ImageHelper;
+import bcr6.uow.comp553.assignment1.R;
+import bcr6.uow.comp553.assignment1.database.DatabaseHelper;
+import bcr6.uow.comp553.assignment1.database.ORMBaseActivity;
+import bcr6.uow.comp553.assignment1.models.Friend;
 
 import java.io.File;
 
@@ -35,15 +33,12 @@ import ezvcard.property.StructuredName;
 
 public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
 
+
     private Friend friend;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.friend_detail_activity);
-
-        SwipeBack.attach(this, SwipeBack.Type.BEHIND, Position.LEFT)
-                .setContentView(R.layout.friend_detail_activity)
-                .setSwipeBackView(R.layout.swipeback_default);
+        setContentView(R.layout.friend_detail_activity);
 
 
         copyToClipboardConfirmation(findViewById(R.id.friend_detail_phone));
@@ -95,7 +90,6 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //TODO icon is showing up in overflow menu, rather than on toolbar
         getMenuInflater().inflate(R.menu.friend_detail_action_items, menu);
         return true;
     }
@@ -130,10 +124,7 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
     @Override
     public void onBackPressed()
     {
-        super.onBackPressed();
-        overridePendingTransition(R.anim.swipeback_stack_to_front,
-                R.anim.swipeback_stack_right_out);
-//        NavUtils.navigateUpFromSameTask(this);
+        NavUtils.navigateUpFromSameTask(this);
     }
 
     private void deleteContact() {
@@ -194,14 +185,14 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
         //If no details for the contact
         if (friend.isEmpty()) {
 
-            mobileTV.setText("Add phone number");
+            mobileTV.setText(R.string.add_phone_number);
             mobileTV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     edit();
                 }
             });
-            emailTV.setText("Add email");
+            emailTV.setText(R.string.add_email);
             emailTV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -258,8 +249,7 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
 
 
         File file = new File(f.getAbsolutePath() + "/vcard.vcf");
-/*        if (!file.exists())
-            file.mkdir();*/
+
         try {
             Ezvcard.write(vcard).go(file);
         } catch (Exception e) {

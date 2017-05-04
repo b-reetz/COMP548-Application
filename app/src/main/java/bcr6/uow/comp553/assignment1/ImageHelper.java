@@ -1,12 +1,10 @@
-package com.example.bcr6.assignment1;
+package bcr6.uow.comp553.assignment1;
 
 import android.app.Activity;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Log;
-import android.widget.ImageView;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,9 +31,11 @@ public class ImageHelper {
         return decodeSampledBitmapFromString(filePath, reqWidth, reqHeight);
     }
 
-    public static Bitmap bitmapSmaller(Resources resources, int resID, int reqWidth, int reqHeight) {
-        return decodeSampledBitmapFromResource(resources, resID, reqWidth, reqHeight);
-    }
+// --Commented out by Inspection START (5/4/17 11:53 AM):
+//    public static Bitmap bitmapSmaller(Resources resources, int resID, int reqWidth, int reqHeight) {
+//        return decodeSampledBitmapFromResource(resources, resID, reqWidth, reqHeight);
+//    }
+// --Commented out by Inspection STOP (5/4/17 11:53 AM)
 
     private static int calculateInSampleSize(
             BitmapFactory.Options options, int reqWidth, int reqHeight) {
@@ -76,22 +76,6 @@ public class ImageHelper {
         return BitmapFactory.decodeFile(photo, options);
     }
 
-    private static Bitmap decodeSampledBitmapFromResource(Resources resources,
-                                                          int resID, int reqWidth, int reqHeight) {
-
-        // First decode with inJustDecodeBounds=true to check dimensions
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeResource(resources, resID, options);
-
-        // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-
-        // Decode bitmap with inSampleSize set
-        options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeResource(resources, resID, options);
-    }
-
     public static String createImageFile(Activity a) {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
 
@@ -106,9 +90,4 @@ public class ImageHelper {
         return imagePath;
     }
 
-    public static void builldImage(String imagePath, ImageView view, ImageView.ScaleType scaleType) {
-        view.setScaleType(scaleType);
-        view.setImageBitmap(bitmapSmaller(imagePath, view.getWidth(), view.getHeight()));
-
-    }
 }

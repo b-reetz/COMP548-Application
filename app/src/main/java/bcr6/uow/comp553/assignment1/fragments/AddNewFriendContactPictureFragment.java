@@ -1,4 +1,4 @@
-package com.example.bcr6.assignment1.fragments;
+package bcr6.uow.comp553.assignment1.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -8,9 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.example.bcr6.assignment1.ImageHelper;
-import com.example.bcr6.assignment1.R;
-import com.example.bcr6.assignment1.activities.AddNewFriend;
+import bcr6.uow.comp553.assignment1.ImageHelper;
+import bcr6.uow.comp553.assignment1.R;
+import bcr6.uow.comp553.assignment1.activities.AddNewFriend;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,7 +22,6 @@ import com.example.bcr6.assignment1.activities.AddNewFriend;
  */
 public class AddNewFriendContactPictureFragment extends Fragment {
     private OnFragmentInteractionListener listener;
-    private String imagePath = "";
 
     public AddNewFriendContactPictureFragment() {
         // Required empty public constructor
@@ -57,6 +56,7 @@ public class AddNewFriendContactPictureFragment extends Fragment {
                 listener.onFragmentInteraction();
             }
         });
+//        this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         return view;
     }
 
@@ -77,7 +77,7 @@ public class AddNewFriendContactPictureFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        imagePath = ((AddNewFriend)getActivity()).getImagePath();
+        String imagePath = ((AddNewFriend)getActivity()).getImagePath();
         if (!imagePath.isEmpty()) {
             ImageView imageView = (ImageView) getActivity().findViewById(R.id.add_new_friend_picture_silhouette);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -103,7 +103,6 @@ public class AddNewFriendContactPictureFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction();
     }
 }
