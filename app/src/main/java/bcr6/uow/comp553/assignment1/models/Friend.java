@@ -63,6 +63,10 @@ public class Friend {
         this.lastName = lastName;
     }
 
+    public String getName() {
+        return firstName + " " + lastName;
+    }
+
     public String getMobileNumber() {
         return mobileNumber;
     }

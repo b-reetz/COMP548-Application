@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.NavUtils;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -17,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import bcr6.uow.comp553.assignment1.ImageHelper;
 import bcr6.uow.comp553.assignment1.R;
@@ -25,11 +25,15 @@ import bcr6.uow.comp553.assignment1.database.ORMBaseActivity;
 import bcr6.uow.comp553.assignment1.models.Friend;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import ezvcard.Ezvcard;
 import ezvcard.VCard;
 import ezvcard.property.Address;
 import ezvcard.property.StructuredName;
+
+import static android.support.v4.content.FileProvider.getUriForFile;
 
 public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
 
@@ -224,6 +228,9 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
         }
     }
 
+    /**
+     * Exports the contact as a vcf
+     */
     private void share() {
         VCard vcard = new VCard();
         StructuredName name = new StructuredName();
@@ -242,25 +249,32 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
 
         vcard.addTelephoneNumber(friend.getMobileNumber());
 
-        File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "test");
-        if (!f.mkdirs())
-            Log.e("SHARE", "Directory not created");
-
-
-
-        File file = new File(f.getAbsolutePath() + "/vcard.vcf");
 
         try {
-            Ezvcard.write(vcard).go(file);
-        } catch (Exception e) {
+            String fileName = friend.getName() + ".vcf";
+            File internalDirectory = new File(getFilesDir(), "vcf");
+            if (!internalDirectory.mkdirs())
+                throw new IOException();
+
+            File contactVCF = new File(internalDirectory, fileName);
+
+            FileOutputStream outputStream = new FileOutputStream(contactVCF);
+            Ezvcard.write(vcard).go(outputStream);
+            outputStream.flush();
+            outputStream.close();
+
+            Uri contentUri = getUriForFile(getApplicationContext(), "bcr6.uow.comp553.assignment1.fileprovider", contactVCF);
+
+            Intent sendIntent = new Intent(Intent.ACTION_SEND);
+            sendIntent.setData(contentUri);
+            sendIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            sendIntent.setType("text/x-vcard");
+            startActivity(sendIntent);
+
+        } catch (IOException e) {
             e.printStackTrace();
+            Log.e("VCARD", "Error writing vcard to internal directory");
+            Toast.makeText(this, "Error sharing contact", Toast.LENGTH_LONG).show();
         }
-
-
-        Intent sendIntent = new Intent(Intent.ACTION_SEND);
-        sendIntent.setType("text/x-vcard");
-        sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-        startActivity(sendIntent);
-
     }
 }
