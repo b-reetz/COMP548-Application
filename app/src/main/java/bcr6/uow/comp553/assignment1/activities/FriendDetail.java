@@ -40,7 +40,6 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.friend_detail_activity);
 
-
         copyToClipboardConfirmation(findViewById(R.id.friend_detail_phone));
         copyToClipboardConfirmation(findViewById(R.id.friend_detail_address));
         copyToClipboardConfirmation(findViewById(R.id.friend_detail_email));
@@ -175,6 +174,10 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
         if (!friend.getImagePath().isEmpty()) {
             photoIV.setImageBitmap(ImageHelper.bitmapSmaller(friend.getImagePath(), 300, 300));
             photoIV.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        } else {
+            photoIV.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            photoIV.setImageResource(R.drawable.ic_person_white_24dp);
+            friend.setImagePath("");
         }
 
 

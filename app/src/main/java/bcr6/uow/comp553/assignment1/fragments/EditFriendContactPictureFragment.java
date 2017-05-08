@@ -22,6 +22,7 @@ import bcr6.uow.comp553.assignment1.R;
 public class EditFriendContactPictureFragment extends Fragment {
     private OnFragmentInteractionListener listener;
     private String imagePath = "";
+    private String tempImagePath = "";
 
     public EditFriendContactPictureFragment() {
         // Required empty public constructor
@@ -104,6 +105,14 @@ public class EditFriendContactPictureFragment extends Fragment {
 
     public String getImagePath() {
         return imagePath;
+    }
+
+    public String getTempImagePath() {
+        return tempImagePath;
+    }
+
+    public void setTempImagePath(String tempImagePath) {
+        this.tempImagePath = tempImagePath;
     }
 
     public void removePhoto() {

@@ -3,11 +3,9 @@ package bcr6.uow.comp553.assignment1.activities;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.FragmentTransaction;
@@ -32,7 +30,9 @@ import bcr6.uow.comp553.assignment1.models.Friend;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.nio.channels.FileChannel;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * Created by Brendan
@@ -167,57 +167,33 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
         super.onActivityResult(requestCode, resultCode, data);
 
         //If we just took a photo
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) { //RESULT_OK = -1
+        if (requestCode == REQUEST_IMAGE_CAPTURE || requestCode == REQUEST_IMAGE_SELECT && resultCode == RESULT_OK) { //RESULT_OK = -1
             try {
+                InputStream is;
+                if (requestCode == REQUEST_IMAGE_CAPTURE)
+                    is = new FileInputStream(new File(imagePath));
+                else
+                    is = getContentResolver().openInputStream(data.getData());
 
-                FileChannel fis = new FileInputStream(new File(imagePath)).getChannel();
-                imagePath = ImageHelper.createImageFile(this); //changes the imagePath variable to new empty file
-                int lastIndex = imagePath.lastIndexOf('/') + 1;
-                FileChannel fos = openFileOutput(imagePath.substring(lastIndex, imagePath.length()), MODE_PRIVATE).getChannel();
-                fos.transferFrom(fis, 0, fis.size());
-                fos.close();
-                fis.close();
+                if (is != null) {
+                    imagePath = ImageHelper.createImageFile(this);
+                    OutputStream fos = new FileOutputStream(imagePath);
+
+                    byte[] buffer = new byte[65536];
+                    int len;
+
+                    while ((len = is.read(buffer)) != -1)
+                        fos.write(buffer, 0, len);
+
+                    fos.close();
+                    is.close();
+                }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        //------------------If we just selected a photo from the gallery--------------
-        else if(requestCode == REQUEST_IMAGE_SELECT && resultCode == RESULT_OK) {
-            /* //TODO need to keep a track of what images we take but don't save..
-             * List all the media's, then query that media using returned uri
-             * Go to the first option (which should be our file), and list
-             *  file's absolute path. We then copy file from public directory in to private memory
-             * Then make cursor null
-             */
-            Cursor cursor = null;
-            try {
-                String[] proj = {MediaStore.Images.Media.DATA};
-                cursor = this.getContentResolver().query(data.getData(), proj, null, null, null);
-                if (cursor == null)
-                    throw new NullPointerException("No Cursor was found when looking for an image");
 
-                int column_index = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
-                cursor.moveToFirst();
-                imagePath = cursor.getString(column_index);
-
-
-            /* Creates FIS from selected image path, then changes imagePath to be a new empty File
-                We then copy the bytes from the selected image into the new internal image file*/
-
-                FileChannel fis = new FileInputStream(new File(imagePath)).getChannel();
-                imagePath = ImageHelper.createImageFile(this);
-                int i = imagePath.lastIndexOf('/') + 1;
-                FileChannel fos = openFileOutput(imagePath.substring(i, imagePath.length()), Context.MODE_PRIVATE).getChannel();
-                fos.transferFrom(fis, 0, fis.size());
-                fos.close();
-                fis.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                if (cursor != null)
-                    cursor.close();
-            }
-        }
 //        If we selected an image
         if (!imagePath.isEmpty()) {
 //        Sets the image as the new select image

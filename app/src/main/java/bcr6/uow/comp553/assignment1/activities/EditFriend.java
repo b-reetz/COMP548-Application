@@ -4,11 +4,9 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -33,10 +31,9 @@ import bcr6.uow.comp553.assignment1.models.Friend;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.nio.channels.Channels;
-import java.nio.channels.FileChannel;
-import java.nio.channels.ReadableByteChannel;
+import java.io.OutputStream;
 
 /**
  * Created by Brendan
@@ -189,72 +186,34 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK)
+            pictureFragment.setImagePath(pictureFragment.getTempImagePath());
+
         //If we just took a photo
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) { //RESULT_OK = -1
+        if ((requestCode == REQUEST_IMAGE_CAPTURE || requestCode == REQUEST_IMAGE_SELECT) && resultCode == RESULT_OK) { //RESULT_OK = -1
             try {
+                InputStream is;
+                if (requestCode == REQUEST_IMAGE_CAPTURE)
+                    is = new FileInputStream(new File(pictureFragment.getImagePath()));
+                else
+                    is = getContentResolver().openInputStream(data.getData());
 
-                FileChannel fis = new FileInputStream(new File(pictureFragment.getImagePath())).getChannel();
-                pictureFragment.setImagePath(ImageHelper.createImageFile(this)); //changes the imagePath variable to new empty file
-                int lastIndex = pictureFragment.getImagePath().lastIndexOf('/') + 1;
-                FileChannel fos = openFileOutput(pictureFragment.getImagePath().substring(lastIndex, pictureFragment.getImagePath().length()), MODE_PRIVATE).getChannel();
-                fos.transferFrom(fis, 0, fis.size());
-                fos.close();
-                fis.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        //------------------If we just selected a photo from the gallery--------------
-        else if(requestCode == REQUEST_IMAGE_SELECT && resultCode == RESULT_OK) {
-            /* //TODO need to keep a track of what images we take but don't save..
-             * List all the media's, then query that media using returned uri
-             * Go to the first option (which should be our file), and list
-             *  file's absolute path. We then copy file from public directory in to private memory
-             * Then make cursor null
-             */
-            Cursor cursor = null;
-            try {
-                String[] proj = {MediaStore.Images.Media.DATA};
-                cursor = this.getContentResolver().query(data.getData(), proj, null, null, null);
-                if (cursor == null)
-                    throw new NullPointerException("No Cursor was found when looking for an image");
-
-                int column_index = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
-                cursor.moveToFirst();
-
-                String url = data.getData().toString();
-                if (url.startsWith("content://com.google.android.apps.photos.content")) {
-                    InputStream is = getContentResolver().openInputStream(data.getData());
+                if (is != null) {
                     pictureFragment.setImagePath(ImageHelper.createImageFile(this));
-                    int i = pictureFragment.getImagePath().lastIndexOf('/') + 1;
-                    ReadableByteChannel fis = Channels.newChannel(is);
-//                    FileOutputStream fos1 = openFileOutput(pictureFragment.getImagePath().substring(i, pictureFragment.getImagePath().length()), Context.MODE_PRIVATE);
+                    OutputStream fos = new FileOutputStream(pictureFragment.getImagePath());
 
-                    FileChannel fos = openFileOutput(pictureFragment.getImagePath().substring(i, pictureFragment.getImagePath().length()), Context.MODE_PRIVATE).getChannel();
-                    fos.transferFrom(fis, 0, 9999999);
+                    byte[] buffer = new byte[65536];
+                    int len;
+
+                    while ((len = is.read(buffer)) != -1)
+                        fos.write(buffer, 0, len);
+
                     fos.close();
-                    fis.close();
-                } else {
-                    pictureFragment.setImagePath(cursor.getString(column_index));
-
-
-            /* Creates FIS from selected image path, then changes imagePath to be a new empty File
-                We then copy the bytes from the selected image into the new internal image file*/
-
-                    FileChannel fis = new FileInputStream(new File(pictureFragment.getImagePath())).getChannel();
-                    pictureFragment.setImagePath(ImageHelper.createImageFile(this));
-                    int i = pictureFragment.getImagePath().lastIndexOf('/') + 1;
-                    FileChannel fos = openFileOutput(pictureFragment.getImagePath().substring(i, pictureFragment.getImagePath().length()), Context.MODE_PRIVATE).getChannel();
-                    fos.transferFrom(fis, 0, fis.size());
-                    fos.close();
-                    fis.close();
+                    is.close();
                 }
 
             } catch (Exception e) {
                 e.printStackTrace();
-            } finally {
-                if (cursor != null)
-                    cursor.close();
             }
         }
 //        If we selected an image
@@ -340,7 +299,7 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
                             f
                     );
                     image.deleteOnExit();
-                    pictureFragment.setImagePath(image.getAbsolutePath()); //creates a temporary file, saving path in imagePath
+                    pictureFragment.setTempImagePath(image.getAbsolutePath()); //creates a temporary file, saving path in imagePath
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(image));
                     startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                 } catch (Exception e) {
