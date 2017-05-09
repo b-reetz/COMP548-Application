@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="250sp"
     android:orientation="vertical"
-    tools:context="bcr6.uow.comp553.assignment1.fragments.AddNewFriendDetailsFragment">
+    tools:context="bcr6.uow.comp548.assignment2.fragments.AddNewFriendDetailsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

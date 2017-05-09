@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="bcr6.uow.comp553.assignment1.activities.EditFriend">
+    tools:context="bcr6.uow.comp548.assignment2.activities.EditFriend">
     <item
         android:id="@+id/edit_friend_save"
         android:orderInCategory="100"
