@@ -1,19 +1,18 @@
-package bcr6.uow.comp553.assignment1.activities;
+package bcr6.uow.comp548.assignment2.activities;
 
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.app.FragmentTransaction;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -21,13 +20,13 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import bcr6.uow.comp553.assignment1.ImageHelper;
-import bcr6.uow.comp553.assignment1.R;
-import bcr6.uow.comp553.assignment1.database.DatabaseHelper;
-import bcr6.uow.comp553.assignment1.database.ORMBaseActivity;
-import bcr6.uow.comp553.assignment1.fragments.EditFriendContactPictureFragment;
-import bcr6.uow.comp553.assignment1.fragments.EditFriendDetailsFragment;
-import bcr6.uow.comp553.assignment1.models.Friend;
+import bcr6.uow.comp548.assignment2.R;
+import bcr6.uow.comp548.assignment2.ImageHelper;
+import bcr6.uow.comp548.assignment2.database.DatabaseHelper;
+import bcr6.uow.comp548.assignment2.database.ORMBaseActivity;
+import bcr6.uow.comp548.assignment2.fragments.AddNewFriendContactPictureFragment;
+import bcr6.uow.comp548.assignment2.fragments.AddNewFriendDetailsFragment;
+import bcr6.uow.comp548.assignment2.models.Friend;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -40,7 +39,7 @@ import java.io.OutputStream;
  *
  * This activity let's you input details and a photo from the camera or gallery to be saved for a contact
  */
-public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditFriendContactPictureFragment.OnFragmentInteractionListener {
+public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements AddNewFriendContactPictureFragment.OnFragmentInteractionListener {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_SELECT = 2;
@@ -49,50 +48,33 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
 
-    private EditFriendContactPictureFragment pictureFragment;
-    private EditFriendDetailsFragment detailsFragment;
+    private String imagePath = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.edit_friend_activity);
+        setContentView(R.layout.add_new_friend_activity);
 
         //Sets up the toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar2);
-        toolbar.setNavigationIcon(R.drawable.ic_clear_white_24dp);
         setSupportActionBar(toolbar);
+        setTitle(R.string.add_new_friend_toolbar_label);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        setTitle("Edit contact");
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null)
-            actionBar.setDisplayHomeAsUpEnabled(true);
 
-        //If first time creating activity
         if (savedInstanceState == null) {
-
-
             Log.d("t", "Building picture fragment");
 
-            int friendID = getIntent().getIntExtra("FRIENDID", 0);
-            if (friendID == 0)
-                throw new IllegalArgumentException("No friend ID passed in to the activity");
-
-            Friend f = getHelper().getFriendDataDao().queryForId(friendID);
-
-            pictureFragment = EditFriendContactPictureFragment.newInstance();
-            pictureFragment.setImagePath(f.getImagePath());
-            detailsFragment = EditFriendDetailsFragment.newInstance();
-            detailsFragment.setFriend(f);
+            AddNewFriendContactPictureFragment pictureFragment = AddNewFriendContactPictureFragment.newInstance();
+            AddNewFriendDetailsFragment detailsFragment = AddNewFriendDetailsFragment.newInstance();
 
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.edit_contact_picture_container, pictureFragment, "PICTURE");
-            fragmentTransaction.replace(R.id.edit_contact_details_container, detailsFragment, "DETAILS");
+            fragmentTransaction.replace(R.id.add_new_contact_picture_container, pictureFragment);
+            fragmentTransaction.replace(R.id.add_new_contact_details_container, detailsFragment);
             fragmentTransaction.commit();
-        } else if (savedInstanceState.containsKey("SET")) {
-//            imagePath = savedInstanceState.getString("IMAGE");
-            pictureFragment = (EditFriendContactPictureFragment) getFragmentManager().findFragmentByTag("PICTURE");
-            detailsFragment = (EditFriendDetailsFragment) getFragmentManager().findFragmentByTag("DETAILS");
-        }
+        } else if (savedInstanceState.containsKey("IMAGE"))
+            imagePath = savedInstanceState.getString("IMAGE");
     }
 
 
@@ -102,7 +84,7 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
      */
     @Override
     public void onSaveInstanceState(Bundle out) {
-        out.putBoolean("SET", true);
+        out.putString("IMAGE", imagePath);
         super.onSaveInstanceState(out);
     }
 
@@ -112,8 +94,9 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
      */
     @Override
     public void onFragmentInteraction() {
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        final String[] items = getResources().getStringArray(pictureFragment.getImagePath().isEmpty() ? R.array.no_photo : R.array.new_photo);
+        final String[] items = getResources().getStringArray(imagePath.isEmpty() ? R.array.no_photo : R.array.new_photo);
         builder.setTitle("Change photo")
                 .setItems(items, new DialogInterface.OnClickListener() {
                     @Override
@@ -140,8 +123,6 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
                         //Mandatory onClick override. Don't need to do anything here
                     }
                 }).create().show();
-
-
     }
 
     /**
@@ -151,8 +132,7 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //TODO icon is showing up in overflow menu, rather than on toolbar
-        getMenuInflater().inflate(R.menu.menu_edit_friend, menu);
+        getMenuInflater().inflate(R.menu.add_new_friend_action_items, menu);
         return true;
     }
 
@@ -164,9 +144,8 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.edit_friend_save: {
-                if (updateFriend())
-//                    onBackPressed();
+            case R.id.action_save_contact: {
+                if (insertFriend())
                     NavUtils.navigateUpFromSameTask(this);
                 return true;
             }
@@ -186,21 +165,18 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK)
-            pictureFragment.setImagePath(pictureFragment.getTempImagePath());
-
         //If we just took a photo
-        if ((requestCode == REQUEST_IMAGE_CAPTURE || requestCode == REQUEST_IMAGE_SELECT) && resultCode == RESULT_OK) { //RESULT_OK = -1
+        if (requestCode == REQUEST_IMAGE_CAPTURE || requestCode == REQUEST_IMAGE_SELECT && resultCode == RESULT_OK) { //RESULT_OK = -1
             try {
                 InputStream is;
                 if (requestCode == REQUEST_IMAGE_CAPTURE)
-                    is = new FileInputStream(new File(pictureFragment.getImagePath()));
+                    is = new FileInputStream(new File(imagePath));
                 else
                     is = getContentResolver().openInputStream(data.getData());
 
                 if (is != null) {
-                    pictureFragment.setImagePath(ImageHelper.createImageFile(this));
-                    OutputStream fos = new FileOutputStream(pictureFragment.getImagePath());
+                    imagePath = ImageHelper.createImageFile(this);
+                    OutputStream fos = new FileOutputStream(imagePath);
 
                     byte[] buffer = new byte[65536];
                     int len;
@@ -216,14 +192,19 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
                 e.printStackTrace();
             }
         }
+
 //        If we selected an image
-        if (!pictureFragment.getImagePath().isEmpty()) {
+        if (!imagePath.isEmpty()) {
 //        Sets the image as the new select image
-            ImageView iV = ((ImageView) findViewById(R.id.edit_friend_picture_silhouette));
+            ImageView iV = ((ImageView) findViewById(R.id.add_new_friend_picture_silhouette));
             iV.setScaleType(ImageView.ScaleType.CENTER_CROP);
             int height = iV.getHeight();
             int width = iV.getWidth();
-            iV.setImageBitmap(ImageHelper.bitmapSmaller(pictureFragment.getImagePath(), width, height));
+            if (width == 0)
+                width = 300;
+            if (height == 0)
+                height = 300;
+            iV.setImageBitmap(ImageHelper.bitmapSmaller(imagePath, width, height));
         }
     }
 
@@ -231,12 +212,18 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
      * Adds a friend to the database
      * @return True if successfully added
      */
-    private boolean updateFriend() {
-        EditText firstNameText = (EditText) findViewById(R.id.edit_friend_details_first_name_edit_text);
-        EditText lastNameText = (EditText) findViewById(R.id.edit_friend_details_last_name_edit_text);
+    private boolean insertFriend() {
+        EditText firstNameText = (EditText) findViewById(R.id.add_new_friend_details_first_name_edit_text);
+        EditText lastNameText = (EditText) findViewById(R.id.add_new_friend_details_last_name_edit_text);
+        EditText mobileNumberText = (EditText) findViewById(R.id.add_new_friend_details_mobile_number_edit_text);
+        EditText emailAddressText = (EditText) findViewById(R.id.add_new_friend_details_email_edit_text);
+        EditText addressText = (EditText) findViewById(R.id.add_new_friend_details_address_edit_text);
 
         String firstName = firstNameText.getText().toString();
         String lastName = lastNameText.getText().toString();
+        String mobileNumber = mobileNumberText.getText().toString();
+        String emailAddress = emailAddressText.getText().toString();
+        String address = addressText.getText().toString();
 
         //Needs at least a name
         if (firstName.isEmpty() && lastName.isEmpty()) {
@@ -245,9 +232,15 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
             return false;
         }
 
-        Friend friend = detailsFragment.getUpdatedFriend();
-        friend.setImagePath(pictureFragment.getImagePath());
-        getHelper().getFriendDataDao().update(friend);
+        Friend friend = new Friend(
+                firstName,
+                lastName,
+                mobileNumber,
+                emailAddress,
+                address, imagePath);
+
+        //Adds the friend to the database
+        getHelper().getFriendDataDao().create(friend);
 
         return true;
     }
@@ -264,7 +257,7 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
 
         Intent intent = new Intent(
                 Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         );
 
         startActivityForResult(intent, REQUEST_IMAGE_SELECT);
@@ -299,7 +292,7 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
                             f
                     );
                     image.deleteOnExit();
-                    pictureFragment.setTempImagePath(image.getAbsolutePath()); //creates a temporary file, saving path in imagePath
+                    imagePath = image.getAbsolutePath(); //creates a temporary file, saving path in imagePath
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(image));
                     startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                 } catch (Exception e) {
@@ -333,7 +326,17 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
      * Removes the user's photo and sets it back to the default one
      */
     private void removePhoto() {
-        pictureFragment.removePhoto();
+        ImageView iV = ((ImageView) findViewById(R.id.add_new_friend_picture_silhouette));
+        iV.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        iV.setImageResource(R.drawable.ic_person_white_24dp);
+        imagePath = "";
+    }
+
+    /**
+     * @return The current image path to the image in the image view. Will be and empty String if no image
+     */
+    public String getImagePath() {
+        return imagePath;
     }
 
 }

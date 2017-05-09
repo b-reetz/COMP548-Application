@@ -1,4 +1,4 @@
-package bcr6.uow.comp553.assignment1;
+package bcr6.uow.comp548.assignment2;
 
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -17,27 +17,27 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
-import bcr6.uow.comp553.assignment1.R;
+import bcr6.uow.comp548.assignment2.R;
 
-import bcr6.uow.comp553.assignment1.activities.AddNewFriend;
-import bcr6.uow.comp553.assignment1.activities.FriendDetail;
-import bcr6.uow.comp553.assignment1.activities.Settings;
-import bcr6.uow.comp553.assignment1.database.DatabaseHelper;
-import bcr6.uow.comp553.assignment1.database.ORMBaseActivity;
-import bcr6.uow.comp553.assignment1.fragments.MainFragment;
-import bcr6.uow.comp553.assignment1.models.Friend;
+import bcr6.uow.comp548.assignment2.activities.AddNewFriend;
+import bcr6.uow.comp548.assignment2.activities.FriendDetail;
+import bcr6.uow.comp548.assignment2.activities.Settings;
+import bcr6.uow.comp548.assignment2.database.DatabaseHelper;
+import bcr6.uow.comp548.assignment2.database.ORMBaseActivity;
+import bcr6.uow.comp548.assignment2.fragments.MainFragment;
+import bcr6.uow.comp548.assignment2.models.Friend;
 
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import static bcr6.uow.comp553.assignment1.activities.Settings.SORT_A_Z;
-import static bcr6.uow.comp553.assignment1.activities.Settings.SORT_BY;
-import static bcr6.uow.comp553.assignment1.activities.Settings.SORT_FIRST;
-import static bcr6.uow.comp553.assignment1.activities.Settings.SORT_LAST;
-import static bcr6.uow.comp553.assignment1.activities.Settings.SORT_ORDER;
-import static bcr6.uow.comp553.assignment1.activities.Settings.SORT_Z_A;
+import static bcr6.uow.comp548.assignment2.activities.Settings.SORT_A_Z;
+import static bcr6.uow.comp548.assignment2.activities.Settings.SORT_BY;
+import static bcr6.uow.comp548.assignment2.activities.Settings.SORT_FIRST;
+import static bcr6.uow.comp548.assignment2.activities.Settings.SORT_LAST;
+import static bcr6.uow.comp548.assignment2.activities.Settings.SORT_ORDER;
+import static bcr6.uow.comp548.assignment2.activities.Settings.SORT_Z_A;
 
 public class MainActivity extends ORMBaseActivity<DatabaseHelper>
         implements MainFragment.OnListFragmentInteractionListener {

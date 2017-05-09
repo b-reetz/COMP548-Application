@@ -1,4 +1,4 @@
-package bcr6.uow.comp553.assignment1.activities;
+package bcr6.uow.comp548.assignment2.activities;
 
 import android.app.AlertDialog;
 import android.content.ClipData;
@@ -18,11 +18,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import bcr6.uow.comp553.assignment1.ImageHelper;
-import bcr6.uow.comp553.assignment1.R;
-import bcr6.uow.comp553.assignment1.database.DatabaseHelper;
-import bcr6.uow.comp553.assignment1.database.ORMBaseActivity;
-import bcr6.uow.comp553.assignment1.models.Friend;
+import bcr6.uow.comp548.assignment2.ImageHelper;
+import bcr6.uow.comp548.assignment2.R;
+import bcr6.uow.comp548.assignment2.database.DatabaseHelper;
+import bcr6.uow.comp548.assignment2.database.ORMBaseActivity;
+import bcr6.uow.comp548.assignment2.models.Friend;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -266,7 +266,7 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
             outputStream.flush();
             outputStream.close();
 
-            Uri contentUri = getUriForFile(getApplicationContext(), "bcr6.uow.comp553.assignment1.fileprovider", contactVCF);
+            Uri contentUri = getUriForFile(getApplicationContext(), "bcr6.uow.comp548.assignment2.fileprovider", contactVCF);
 
             Intent sendIntent = new Intent(Intent.ACTION_SEND);
             sendIntent.setData(contentUri);

@@ -1,4 +1,4 @@
-package bcr6.uow.comp553.assignment1.fragments;
+package bcr6.uow.comp548.assignment2.fragments;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -10,9 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import bcr6.uow.comp553.assignment1.adaptors.MainRecyclerViewAdapter;
-import bcr6.uow.comp553.assignment1.R;
-import bcr6.uow.comp553.assignment1.models.Friend;
+import bcr6.uow.comp548.assignment2.adaptors.MainRecyclerViewAdapter;
+import bcr6.uow.comp548.assignment2.R;
+import bcr6.uow.comp548.assignment2.models.Friend;
 
 import java.util.List;
 

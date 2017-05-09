@@ -1,4 +1,4 @@
-package bcr6.uow.comp553.assignment1;
+package bcr6.uow.comp548.assignment2;
 
 import org.junit.Test;
 

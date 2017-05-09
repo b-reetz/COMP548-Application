@@ -1,4 +1,4 @@
-package bcr6.uow.comp553.assignment1.models;
+package bcr6.uow.comp548.assignment2.models;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;

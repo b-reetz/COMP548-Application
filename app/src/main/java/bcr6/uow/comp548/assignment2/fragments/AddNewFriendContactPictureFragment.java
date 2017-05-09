@@ -1,30 +1,29 @@
-package bcr6.uow.comp553.assignment1.fragments;
+package bcr6.uow.comp548.assignment2.fragments;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import bcr6.uow.comp553.assignment1.ImageHelper;
-import bcr6.uow.comp553.assignment1.R;
+import bcr6.uow.comp548.assignment2.ImageHelper;
+import bcr6.uow.comp548.assignment2.R;
+import bcr6.uow.comp548.assignment2.activities.AddNewFriend;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link EditFriendContactPictureFragment.OnFragmentInteractionListener} interface
+ * {@link AddNewFriendContactPictureFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link EditFriendContactPictureFragment#newInstance} factory method to
+ * Use the {@link AddNewFriendContactPictureFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EditFriendContactPictureFragment extends Fragment {
+public class AddNewFriendContactPictureFragment extends Fragment {
     private OnFragmentInteractionListener listener;
-    private String imagePath = "";
-    private String tempImagePath = "";
 
-    public EditFriendContactPictureFragment() {
+    public AddNewFriendContactPictureFragment() {
         // Required empty public constructor
     }
 
@@ -35,11 +34,14 @@ public class EditFriendContactPictureFragment extends Fragment {
      * @return A new instance of fragment AddNewFriendContactPictureFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static EditFriendContactPictureFragment newInstance() {
-        EditFriendContactPictureFragment fragment = new EditFriendContactPictureFragment();
-        fragment.setArguments(new Bundle());
-        fragment.setRetainInstance(true);
-        return fragment;
+    public static AddNewFriendContactPictureFragment newInstance() {
+        return new AddNewFriendContactPictureFragment();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
     }
 
     @Override
@@ -47,21 +49,14 @@ public class EditFriendContactPictureFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.edit_friend_picture, container, false);
-
-        if (!imagePath.isEmpty()) {
-            ImageView imageView = (ImageView) view.findViewById(R.id.edit_friend_picture_silhouette);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setImageBitmap(ImageHelper.bitmapSmaller(imagePath,
-                    200, 200));
-        }
-
+        View view = inflater.inflate(R.layout.add_new_friend_picture, container, false);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 listener.onFragmentInteraction();
             }
         });
+//        this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         return view;
     }
 
@@ -76,6 +71,19 @@ public class EditFriendContactPictureFragment extends Fragment {
                     + " must implement OnFragmentInteractionListener");
         }
 
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        String imagePath = ((AddNewFriend)getActivity()).getImagePath();
+        if (!imagePath.isEmpty()) {
+            ImageView imageView = (ImageView) getActivity().findViewById(R.id.add_new_friend_picture_silhouette);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setImageBitmap(ImageHelper.bitmapSmaller(imagePath,
+                    200, 200));
+        }
     }
 
     @Override
@@ -95,36 +103,6 @@ public class EditFriendContactPictureFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction();
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-    }
-
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public String getTempImagePath() {
-        return tempImagePath;
-    }
-
-    public void setTempImagePath(String tempImagePath) {
-        this.tempImagePath = tempImagePath;
-    }
-
-    public void removePhoto() {
-
-
-        if (getView() != null) {
-            ImageView iV = (ImageView) getView().findViewById(R.id.edit_friend_picture_silhouette);
-            if (iV != null) {
-                iV.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                iV.setImageResource(R.drawable.ic_person_white_24dp);
-            }
-        }
-        imagePath = "";
     }
 }

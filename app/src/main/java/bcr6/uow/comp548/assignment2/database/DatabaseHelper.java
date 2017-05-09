@@ -1,10 +1,10 @@
-package bcr6.uow.comp553.assignment1.database;
+package bcr6.uow.comp548.assignment2.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import bcr6.uow.comp553.assignment1.models.Friend;
+import bcr6.uow.comp548.assignment2.models.Friend;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;

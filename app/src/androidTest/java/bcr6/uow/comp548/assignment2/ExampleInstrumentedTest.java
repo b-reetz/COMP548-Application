@@ -1,4 +1,4 @@
-package bcr6.uow.comp553.assignment1;
+package bcr6.uow.comp548.assignment2;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("bcr6.uow.comp553.assignment1", appContext.getPackageName());
+        assertEquals("bcr6.uow.comp548.assignment2", appContext.getPackageName());
     }
 }
