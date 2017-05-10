@@ -14,11 +14,18 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 
 import bcr6.uow.comp548.assignment2.R;
 import bcr6.uow.comp548.assignment2.ImageHelper;
@@ -43,6 +50,7 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_SELECT = 2;
+    public static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 3;
     private static final int API_LEVEL = android.os.Build.VERSION.SDK_INT;
     private static final String[] PERMISSIONS_STORAGE = {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -62,7 +70,6 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
         if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
         if (savedInstanceState == null) {
             Log.d("t", "Building picture fragment");
 
@@ -73,8 +80,21 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
             fragmentTransaction.replace(R.id.add_new_contact_picture_container, pictureFragment);
             fragmentTransaction.replace(R.id.add_new_contact_details_container, detailsFragment);
             fragmentTransaction.commit();
+
         } else if (savedInstanceState.containsKey("IMAGE"))
             imagePath = savedInstanceState.getString("IMAGE");
+
+    }
+
+    public void launchAutoComplete() {
+        try {
+            Intent intent =
+                    new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                            .build(this);
+            startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
+        } catch (Exception e) {
+            // TODO: Handle the error.
+        }
     }
 
 
@@ -163,8 +183,10 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
      * @param data The data returned from the intent
      */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        Toast.makeText(this, data.getData().toString(), Toast.LENGTH_SHORT).show();
         super.onActivityResult(requestCode, resultCode, data);
 
+        Log.e("HERE", "got here");
         //If we just took a photo
         if (requestCode == REQUEST_IMAGE_CAPTURE || requestCode == REQUEST_IMAGE_SELECT && resultCode == RESULT_OK) { //RESULT_OK = -1
             try {
@@ -190,6 +212,19 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
 
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+        } else if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+            String TAG = "PLACE";
+            if (resultCode == RESULT_OK) {
+                Place place = PlaceAutocomplete.getPlace(this, data);
+                EditText address = (EditText) findViewById(R.id.add_new_friend_details_address_edit_text);
+                address.setText(place.getAddress());
+                Log.i(TAG, "Place: " + place.getName());
+            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                Status status = PlaceAutocomplete.getStatus(this, data);
+                Log.i(TAG, status.getStatusMessage());
+            } else if (resultCode == RESULT_CANCELED) {
+                Log.i(TAG, "User cancelled");
             }
         }
 
