@@ -1,19 +1,15 @@
 package bcr6.uow.comp548.assignment2.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 
@@ -28,6 +24,7 @@ import bcr6.uow.comp548.assignment2.activities.AddNewFriend;
  */
 public class AddNewFriendDetailsFragment extends Fragment {
 
+	Place place;
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -45,40 +42,40 @@ public class AddNewFriendDetailsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.add_new_friend_details, container, false);
+	    View view = inflater.inflate(R.layout.add_new_friend_details, container, false);
 
-        EditText address = (EditText) view.findViewById(R.id.add_new_friend_details_address_edit_text);
-/*        address.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+	    /*PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+			    getChildFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
 
-            }
+	    autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+		    @Override
+		    public void onPlaceSelected(Place place) {
+			    transferPlace(place);
+			    Log.i("OMG", "Place: " + place.getName());
+		    }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                try {
-                    Intent intent =
-                            new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
-                                    .build(getActivity());
-                    startActivityForResult(intent, AddNewFriend.PLACE_AUTOCOMPLETE_REQUEST_CODE);
-                } catch (Exception e) {
-                    // TODO: Handle the error.
-                }
-            }
+		    @Override
+		    public void onError(Status status) {
+			    // TODO: Handle the error.
+			    Log.i("OMG", "An error occurred: " + status);
+		    }
+	    });*/
 
-            @Override
-            public void afterTextChanged(Editable s) {
+/*	    TextView tV = (TextView) view.findViewById(R.id.add_new_friend_details_address_edit_text);
 
-            }
-        });*/
-        address.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((AddNewFriend)getContext()).launchAutoComplete();
-            }
-        });
+	    tV.setOnClickListener(new View.OnClickListener() {
+		    @Override
+		    public void onClick(View v) {
 
-        return view;
+		    }
+	    });*/
+
+	    return view;
     }
+
+    public void transferPlace(Place place) {
+	    ((AddNewFriend)getActivity()).setPlace(place);
+    }
+
 
 }

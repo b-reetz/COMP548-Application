@@ -23,12 +23,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 
-import bcr6.uow.comp548.assignment2.R;
 import bcr6.uow.comp548.assignment2.ImageHelper;
+import bcr6.uow.comp548.assignment2.R;
 import bcr6.uow.comp548.assignment2.database.DatabaseHelper;
 import bcr6.uow.comp548.assignment2.database.ORMBaseActivity;
 import bcr6.uow.comp548.assignment2.fragments.AddNewFriendContactPictureFragment;
@@ -50,13 +49,13 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_SELECT = 2;
-    public static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 3;
     private static final int API_LEVEL = android.os.Build.VERSION.SDK_INT;
     private static final String[] PERMISSIONS_STORAGE = {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
 
     private String imagePath = "";
+	private Place place;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,23 +77,11 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
 
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.add_new_contact_picture_container, pictureFragment);
-            fragmentTransaction.replace(R.id.add_new_contact_details_container, detailsFragment);
+            fragmentTransaction.replace(R.id.add_new_contact_details_container, detailsFragment, "TAG");
             fragmentTransaction.commit();
 
         } else if (savedInstanceState.containsKey("IMAGE"))
             imagePath = savedInstanceState.getString("IMAGE");
-
-    }
-
-    public void launchAutoComplete() {
-        try {
-            Intent intent =
-                    new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
-                            .build(this);
-            startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
-        } catch (Exception e) {
-            // TODO: Handle the error.
-        }
     }
 
 
@@ -183,10 +170,8 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
      * @param data The data returned from the intent
      */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        Toast.makeText(this, data.getData().toString(), Toast.LENGTH_SHORT).show();
         super.onActivityResult(requestCode, resultCode, data);
 
-        Log.e("HERE", "got here");
         //If we just took a photo
         if (requestCode == REQUEST_IMAGE_CAPTURE || requestCode == REQUEST_IMAGE_SELECT && resultCode == RESULT_OK) { //RESULT_OK = -1
             try {
@@ -212,19 +197,6 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
 
             } catch (Exception e) {
                 e.printStackTrace();
-            }
-        } else if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
-            String TAG = "PLACE";
-            if (resultCode == RESULT_OK) {
-                Place place = PlaceAutocomplete.getPlace(this, data);
-                EditText address = (EditText) findViewById(R.id.add_new_friend_details_address_edit_text);
-                address.setText(place.getAddress());
-                Log.i(TAG, "Place: " + place.getName());
-            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
-                Status status = PlaceAutocomplete.getStatus(this, data);
-                Log.i(TAG, status.getStatusMessage());
-            } else if (resultCode == RESULT_CANCELED) {
-                Log.i(TAG, "User cancelled");
             }
         }
 
@@ -252,13 +224,14 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
         EditText lastNameText = (EditText) findViewById(R.id.add_new_friend_details_last_name_edit_text);
         EditText mobileNumberText = (EditText) findViewById(R.id.add_new_friend_details_mobile_number_edit_text);
         EditText emailAddressText = (EditText) findViewById(R.id.add_new_friend_details_email_edit_text);
-        EditText addressText = (EditText) findViewById(R.id.add_new_friend_details_address_edit_text);
+//        EditText addressText = (EditText) findViewById(R.id.add_new_friend_details_address_edit_text);
 
         String firstName = firstNameText.getText().toString();
         String lastName = lastNameText.getText().toString();
         String mobileNumber = mobileNumberText.getText().toString();
         String emailAddress = emailAddressText.getText().toString();
-        String address = addressText.getText().toString();
+//        String address = addressText.getText().toString();
+	    String address = "";
 
         //Needs at least a name
         if (firstName.isEmpty() && lastName.isEmpty()) {
@@ -272,12 +245,17 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
                 lastName,
                 mobileNumber,
                 emailAddress,
-                address, imagePath);
+                address,
+		        imagePath);
 
         //Adds the friend to the database
         getHelper().getFriendDataDao().create(friend);
 
         return true;
+    }
+
+    public void setPlace(Place place) {
+	    this.place = place;
     }
 
     /**

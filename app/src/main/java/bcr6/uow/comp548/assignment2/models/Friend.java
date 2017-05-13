@@ -1,5 +1,7 @@
 package bcr6.uow.comp548.assignment2.models;
 
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.maps.model.LatLng;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -27,20 +29,18 @@ public class Friend {
     @DatabaseField(canBeNull = false)
     private String imagePath;
 
-
     public Friend() {
 
     }
 
     public Friend(String firstName, String lastName, String mobileNumber, String emailAddress, String address, String imagePath) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.mobileNumber = mobileNumber;
-        this.emailAddress = emailAddress;
-        this.address = address;
-        this.imagePath = imagePath;
+        this.firstName = firstName != null ? firstName : "";
+        this.lastName = lastName != null ? lastName : "";
+        this.mobileNumber = mobileNumber != null ? mobileNumber : "";
+        this.emailAddress = emailAddress != null ? emailAddress : "";
+        this.address = address != null ? address : "";
+        this.imagePath = imagePath != null ? imagePath : "";
     }
-
 
 
     public int getId() {
@@ -99,7 +99,7 @@ public class Friend {
         this.imagePath = imagePath;
     }
 
-    public boolean isEmpty() {
+	public boolean isEmpty() {
         return mobileNumber.isEmpty() && emailAddress.isEmpty() && address.isEmpty();
 
     }

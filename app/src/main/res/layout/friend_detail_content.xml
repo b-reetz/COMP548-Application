@@ -68,6 +68,7 @@
                     android:id="@+id/friend_detail_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:onClick="openMapActivity"
                     android:drawableStart="@drawable/ic_location_on_black_24dp"
                     android:drawablePadding="20dp"
                     android:paddingTop="20dp"
@@ -78,6 +79,18 @@
                     android:maxLines="1"
                     android:ellipsize="end"
                     android:textAppearance="@style/TextAppearance.AppCompat" />
+
+                <!--<View
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/friend_map_container"
+                    android:visibility="gone">
+                    <fragment
+                        class="com.google.android.gms.maps.MapFragment"
+                        android:id="@+id/friend_map"
+                        android:layout_width="match_parent"
+                        android:layout_height="200sp"/>
+                </View>-->
             </LinearLayout>
 
         </android.support.v7.widget.CardView>

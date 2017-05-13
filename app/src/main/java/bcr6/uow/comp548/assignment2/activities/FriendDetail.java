@@ -1,11 +1,13 @@
 package bcr6.uow.comp548.assignment2.activities;
 
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -17,6 +19,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import bcr6.uow.comp548.assignment2.ImageHelper;
 import bcr6.uow.comp548.assignment2.R;
@@ -30,13 +39,15 @@ import java.io.IOException;
 
 import ezvcard.Ezvcard;
 import ezvcard.VCard;
+import ezvcard.VCardVersion;
+import ezvcard.io.text.VCardWriter;
 import ezvcard.property.Address;
 import ezvcard.property.StructuredName;
 
 import static android.support.v4.content.FileProvider.getUriForFile;
 
+//public class FriendDetail extends ORMBaseActivity<DatabaseHelper> implements OnMapReadyCallback {
 public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
-
 
     private Friend friend;
     @Override
@@ -189,6 +200,7 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
         TextView emailTV = (TextView) findViewById(R.id.friend_detail_email);
         TextView addressTV = (TextView) findViewById(R.id.friend_detail_address);
 
+
         //If no details for the contact
         if (friend.isEmpty()) {
 
@@ -229,7 +241,43 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
             } else
                 addressTV.setVisibility(View.GONE);
         }
+/*	    View container = findViewById(R.id.friend_map_container);
+		if (friend.hasPlace()) {
+			container.setVisibility(View.VISIBLE);
+			MapFragment mapFragment = (MapFragment) getFragmentManager()
+					.findFragmentById(R.id.friend_map);
+
+			mapFragment.getMapAsync(this);
+		} else
+			container.setVisibility(View.GONE);*/
+
     }
+
+
+	public void openMapActivity(View view) {
+		Intent intent = new Intent(this, FriendLocationDetails.class);
+		startActivity(intent);
+	}
+
+/*
+	@Override
+	public void onMapReady(GoogleMap map) {
+		//Friend LatLng
+		LatLng addressCoordinates = new LatLng(friend.getLat(), friend.getLng());
+		//Curr LatLng
+		//TODO what if there is no permission?
+		LatLng currCoordinates = new LatLng(-37.7846035,175.3084514);
+
+		//Works out the co-ordinates between the two LatLng
+		float[] results = new float[1];
+		Location.distanceBetween(addressCoordinates.latitude, addressCoordinates.longitude,
+				currCoordinates.latitude, currCoordinates.longitude, results);
+
+		float distance = results[0]/1000;   //How far current position away from user
+		map.moveCamera(CameraUpdateFactory.newLatLngZoom(addressCoordinates, 10));
+		map.addMarker(new MarkerOptions().title(friend.getName()).snippet(distance + " km's away").position(addressCoordinates));
+	}
+*/
 
     /**
      * Exports the contact as a vcf
@@ -249,22 +297,21 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
         vcard.addAddress(address);
 
         vcard.addEmail(friend.getEmailAddress());
-
         vcard.addTelephoneNumber(friend.getMobileNumber());
+//	    vcard.setGeo(friend.getLat(), friend.getLng());
 
 
         try {
             String fileName = friend.getName() + ".vcf";
             File internalDirectory = new File(getFilesDir(), "vcf");
             if (!internalDirectory.mkdirs())
-                throw new IOException();
+                Log.e("VCard", "vcf directory either already exists, or it was uanble to be created");
 
             File contactVCF = new File(internalDirectory, fileName);
 
-            FileOutputStream outputStream = new FileOutputStream(contactVCF);
-            Ezvcard.write(vcard).go(outputStream);
-            outputStream.flush();
-            outputStream.close();
+	        VCardWriter writer = new VCardWriter(contactVCF, VCardVersion.V3_0);
+	        writer.write(vcard);
+	        writer.close();
 
             Uri contentUri = getUriForFile(getApplicationContext(), "bcr6.uow.comp548.assignment2.fileprovider", contactVCF);
 
