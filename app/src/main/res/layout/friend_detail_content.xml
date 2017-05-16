@@ -90,7 +90,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="50dp"
                         android:layout_marginEnd="50dp"
-                        android:text="See location details"
+                        android:text="@string/location_details_button"
                         android:onClick="openMapActivity"
                         />
                 </LinearLayout>

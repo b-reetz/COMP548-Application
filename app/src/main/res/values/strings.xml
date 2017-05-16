@@ -39,4 +39,7 @@
     <string name="add_phone_number">Add phone number</string>
     <string name="add_email">Add email</string>
     <string name="title_activity_friend_location_details">Map</string>
+
+    <!-- FRIEND DETAIL -->
+    <string name="location_details_button">SEE LOCATION DETAILS</string>
 </resources>
