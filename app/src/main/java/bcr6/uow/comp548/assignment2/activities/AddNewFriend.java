@@ -120,7 +120,6 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
                             case "Remove photo":
                                 removePhoto();
                                 break;
-
                         }
                     }
                 })

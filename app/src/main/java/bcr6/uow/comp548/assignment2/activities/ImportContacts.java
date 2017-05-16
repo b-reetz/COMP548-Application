@@ -25,7 +25,7 @@ public class ImportContacts extends ORMBaseActivity<DatabaseHelper> {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.import_contacts_activity);
+		setContentView(R.layout.vcfcontacts_activity);
 
 		try {
 			//Begins a Database Transaction
