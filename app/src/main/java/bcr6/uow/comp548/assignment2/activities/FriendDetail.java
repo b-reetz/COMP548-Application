@@ -1,6 +1,7 @@
 package bcr6.uow.comp548.assignment2.activities;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -254,7 +255,15 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
 
             if (!checkPermissions(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                    //TODO display message as to why this permission is necessary
+                    final Activity activity = this;
+                    new AlertDialog.Builder(this)
+                            .setMessage("This feature requires access to your phone's location services to work. Without it, this feature is pointless")
+                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    getPermissions(activity, ALLOW_COARSE_LOCATION_CODE, Manifest.permission.ACCESS_COARSE_LOCATION);
+                                }
+                            }).setNegativeButton(R.string.cancel, null).show();
                 } else
                     getPermissions(this, ALLOW_COARSE_LOCATION_CODE, Manifest.permission.ACCESS_COARSE_LOCATION);
             } else
