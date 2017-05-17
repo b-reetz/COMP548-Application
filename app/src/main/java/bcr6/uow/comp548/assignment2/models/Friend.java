@@ -103,4 +103,13 @@ public class Friend {
         return mobileNumber.isEmpty() && emailAddress.isEmpty() && address.isEmpty();
 
     }
+
+    /**
+     * Returns the first or last name of this friend. Favours the first name, and if
+     * that is empty, returns the last name
+     * @return Returns the first name if it's not empty, else it return the last name
+     */
+    public String getOneName() {
+        return getFirstName().isEmpty() ? getLastName() : getFirstName();
+    }
 }

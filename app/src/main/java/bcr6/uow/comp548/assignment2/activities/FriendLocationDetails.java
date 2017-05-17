@@ -1,29 +1,34 @@
 package bcr6.uow.comp548.assignment2.activities;
 
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import bcr6.uow.comp548.assignment2.R;
+import bcr6.uow.comp548.assignment2.database.DatabaseHelper;
+import bcr6.uow.comp548.assignment2.database.ORMBaseActivity;
+import bcr6.uow.comp548.assignment2.models.Friend;
 
-public class FriendLocationDetails extends FragmentActivity implements OnMapReadyCallback {
+public class FriendLocationDetails extends ORMBaseActivity<DatabaseHelper> implements OnMapReadyCallback {
 
-	private GoogleMap mMap;
+	private Friend friend;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.maps_activity);
-		// Obtain the SupportMapFragment and get notified when the map is ready to be used.
-		SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+		setContentView(R.layout.friend_location_activity);
+
+		populateData();
+
+/*		SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.map);
-		mapFragment.getMapAsync(this);
+		mapFragment.getMapAsync(this);*/
 	}
 
 
@@ -38,11 +43,32 @@ public class FriendLocationDetails extends FragmentActivity implements OnMapRead
 	 */
 	@Override
 	public void onMapReady(GoogleMap googleMap) {
-		mMap = googleMap;
 
 		// Add a marker in Sydney and move the camera
 		LatLng sydney = new LatLng(-34, 151);
-		mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-		mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+	}
+
+	public void populateData() {
+        int friendID;
+        String errorMessage = "No extra was passed through to this activity.. How did we get here?";
+        if (getIntent().hasExtra("friendID"))
+            friendID = getIntent().getIntExtra("friendID", 0);
+        else
+            throw new IllegalArgumentException(errorMessage);
+
+        friend = getHelper().getFriendDataDao().queryForId(friendID);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(friend.getOneName() + "'s location details");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+        TextView addressTV = (TextView) findViewById(R.id.friend_location_address);
+        addressTV.setText(friend.getAddress());
 	}
 }
