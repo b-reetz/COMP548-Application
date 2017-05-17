@@ -27,6 +27,7 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 
 import bcr6.uow.comp548.assignment2.ImageHelper;
+import bcr6.uow.comp548.assignment2.MainActivity;
 import bcr6.uow.comp548.assignment2.R;
 import bcr6.uow.comp548.assignment2.database.DatabaseHelper;
 import bcr6.uow.comp548.assignment2.database.ORMBaseActivity;
@@ -40,6 +41,8 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import static bcr6.uow.comp548.assignment2.MainActivity.API_LEVEL;
+
 /**
  * Created by Brendan
  *
@@ -49,7 +52,6 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_SELECT = 2;
-    private static final int API_LEVEL = android.os.Build.VERSION.SDK_INT;
     private static final String[] PERMISSIONS_STORAGE = {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };

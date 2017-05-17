@@ -42,7 +42,7 @@ import static bcr6.uow.comp548.assignment2.activities.Settings.SORT_Z_A;
 public class MainActivity extends ORMBaseActivity<DatabaseHelper>
         implements MainFragment.OnListFragmentInteractionListener {
 
-
+    public static final int API_LEVEL = android.os.Build.VERSION.SDK_INT;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -1,13 +1,16 @@
 package bcr6.uow.comp548.assignment2.activities;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -35,9 +38,16 @@ import ezvcard.property.Address;
 import ezvcard.property.StructuredName;
 
 import static android.support.v4.content.FileProvider.getUriForFile;
+import static bcr6.uow.comp548.assignment2.MainActivity.API_LEVEL;
+import static bcr6.uow.comp548.assignment2.PermissionsHelper.checkPermissions;
+import static bcr6.uow.comp548.assignment2.PermissionsHelper.getPermissions;
 
 
 public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
+
+    private static final int ALLOW_FINE_LOCATION_CODE = 1;
+    private static final int ALLOW_COARSE_LOCATION_CODE = 2;
+
 
     private Friend friend;
     @Override
@@ -235,10 +245,38 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
     }
 
 
+    /**
+     *
+     * @param view The view that was interacted with
+     */
 	public void openMapActivity(View view) {
-		Intent intent = new Intent(this, FriendLocationDetails.class);
-		startActivity(intent);
+        if (API_LEVEL >= 23)
+
+            if (!checkPermissions(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                    //TODO display message as to why this permission is necessary
+                } else
+                    getPermissions(this, ALLOW_COARSE_LOCATION_CODE, Manifest.permission.ACCESS_COARSE_LOCATION);
+            } else
+                startMapActivity();
+
 	}
+
+
+	@Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (permissions.length > 0 && grantResults.length > 0) { //If the permissions request was not interrupted
+            if (requestCode == ALLOW_COARSE_LOCATION_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startMapActivity();
+            }
+        }
+    }
+
+    private void startMapActivity() {
+        Intent intent = new Intent(this, FriendLocationDetails.class);
+        intent.putExtra("friendID", friend.getId());
+        startActivity(intent);
+    }
 
     /**
      * Exports the contact as a vcf
