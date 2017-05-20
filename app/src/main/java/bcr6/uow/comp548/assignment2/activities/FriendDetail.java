@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.FileProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -29,9 +30,15 @@ import bcr6.uow.comp548.assignment2.database.DatabaseHelper;
 import bcr6.uow.comp548.assignment2.database.ORMBaseActivity;
 import bcr6.uow.comp548.assignment2.models.Friend;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 
+import ezvcard.Ezvcard;
 import ezvcard.VCard;
 import ezvcard.VCardVersion;
 import ezvcard.io.text.VCardWriter;
@@ -306,7 +313,6 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
 
         vcard.addEmail(friend.getEmailAddress());
         vcard.addTelephoneNumber(friend.getMobileNumber());
-//	    vcard.setGeo(friend.getLat(), friend.getLng());
 
 
         try {
@@ -316,16 +322,17 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
                 Log.e("VCard", "vcf directory either already exists, or it was uanble to be created");
 
             File contactVCF = new File(internalDirectory, fileName);
+	        contactVCF.createNewFile();
 
 	        VCardWriter writer = new VCardWriter(contactVCF, VCardVersion.V3_0);
 	        writer.write(vcard);
 	        writer.close();
 
-            Uri contentUri = getUriForFile(getApplicationContext(), "bcr6.uow.comp548.assignment2.fileprovider", contactVCF);
+            Uri contentUri = FileProvider.getUriForFile(this, "bcr6.uow.comp548.assignment2.fileprovider", contactVCF);
 
-            Intent sendIntent = new Intent(Intent.ACTION_SEND);
-            sendIntent.setData(contentUri);
+            Intent sendIntent = new Intent(Intent.ACTION_SEND);;
             sendIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+	        sendIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
             sendIntent.setType("text/x-vcard");
             startActivity(sendIntent);
 
