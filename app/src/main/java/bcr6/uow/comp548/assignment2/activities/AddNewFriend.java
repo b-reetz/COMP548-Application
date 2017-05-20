@@ -57,6 +57,7 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
     };
 
     private String imagePath = "";
+	private String tempPath = "";
 	private Place place;
 
     @Override
@@ -178,7 +179,7 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
             try {
                 InputStream is;
                 if (requestCode == REQUEST_IMAGE_CAPTURE)
-                    is = new FileInputStream(new File(imagePath));
+                    is = new FileInputStream(new File(tempPath));
                 else
                     is = getContentResolver().openInputStream(data.getData());
 
@@ -225,14 +226,13 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
         EditText lastNameText = (EditText) findViewById(R.id.add_new_friend_details_last_name_edit_text);
         EditText mobileNumberText = (EditText) findViewById(R.id.add_new_friend_details_mobile_number_edit_text);
         EditText emailAddressText = (EditText) findViewById(R.id.add_new_friend_details_email_edit_text);
-//        EditText addressText = (EditText) findViewById(R.id.add_new_friend_details_address_edit_text);
+        EditText addressText = (EditText) findViewById(R.id.add_new_friend_details_address_edit_text);
 
         String firstName = firstNameText.getText().toString();
         String lastName = lastNameText.getText().toString();
         String mobileNumber = mobileNumberText.getText().toString();
         String emailAddress = emailAddressText.getText().toString();
-//        String address = addressText.getText().toString();
-	    String address = "";
+        String address = addressText.getText().toString();
 
         //Needs at least a name
         if (firstName.isEmpty() && lastName.isEmpty()) {
@@ -306,7 +306,7 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
                             f
                     );
                     image.deleteOnExit();
-                    imagePath = image.getAbsolutePath(); //creates a temporary file, saving path in imagePath
+                    tempPath = image.getAbsolutePath(); //creates a temporary file, saving path in imagePath
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(image));
                     startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                 } catch (Exception e) {
