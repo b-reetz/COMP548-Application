@@ -67,6 +67,35 @@ public class PermissionsHelper {
         return ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED;
     }
 
+    public static List<String> hasPermissions(Context context, String... permissions) {
+
+	    List<String> toReturn = new ArrayList<>();
+	    //Checks to see if the permissions we're requesting are in the manifest
+	    try {
+		    PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_PERMISSIONS);
+		    List<String> requestedPermissions = new ArrayList<>(Arrays.asList(packageInfo.requestedPermissions));
+
+		    for (String s : permissions) {
+
+			    //If the permission is listed in the manifest
+			    if (requestedPermissions.contains(s)) {
+				    //if the permission is not granted
+				    if (ContextCompat.checkSelfPermission(context, s) == PackageManager.PERMISSION_DENIED)
+				    	toReturn.add(s);
+			    } else {
+				    //else throw an error
+				    Toast.makeText(context, "Error requesting permissions. Unable to access this feature", Toast.LENGTH_LONG).show();
+				    throw new PackageManager.NameNotFoundException("The permission " + s + " does not exist in the manifest");
+			    }
+		    }
+
+	    } catch (PackageManager.NameNotFoundException e) {
+		    e.printStackTrace();
+		    Log.e("Permissions", e.getMessage());
+	    }
+	    return toReturn;
+    }
+
     /**
      * @param activity The target activity
      * @param requestCode The request code. This is defined by the class calling this method
@@ -74,6 +103,15 @@ public class PermissionsHelper {
      */
     public static void getPermissions(Activity activity, int requestCode, String... permissions)  {
         ActivityCompat.requestPermissions(activity, permissions, requestCode);
+    }
+
+    public static void getPermissions(Activity activity, int requestCode, List<String> permissions) {
+	    if (permissions.isEmpty()) {
+		    Log.e("Permissions", "No permissions to request for");
+		    return;
+	    }
+//	    String[] arrayPermissions = new String[permissions.size()];
+	    ActivityCompat.requestPermissions(activity, permissions.toArray(new String[]{}), requestCode);
     }
 
 }

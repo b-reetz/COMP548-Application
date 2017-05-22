@@ -14,20 +14,22 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.TextView;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.maps.model.LatLng;
 
 import bcr6.uow.comp548.assignment2.ImageHelper;
-import bcr6.uow.comp548.assignment2.MainActivity;
 import bcr6.uow.comp548.assignment2.R;
 import bcr6.uow.comp548.assignment2.database.DatabaseHelper;
 import bcr6.uow.comp548.assignment2.database.ORMBaseActivity;
@@ -52,6 +54,7 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_SELECT = 2;
+	private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 3;
     private static final String[] PERMISSIONS_STORAGE = {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
@@ -59,6 +62,7 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
     private String imagePath = "";
 	private String tempPath = "";
 	private Place place;
+	private LatLng loc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +89,28 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
 
         } else if (savedInstanceState.containsKey("IMAGE"))
             imagePath = savedInstanceState.getString("IMAGE");
+    }
+
+    @Override
+    public void onStart() {
+	    EditText address = (EditText) findViewById(R.id.add_new_friend_details_address_edit_text);
+	    address.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+		    @Override
+		    public void onFocusChange(View v, boolean hasFocus) {
+			    if (hasFocus) {
+				    try {
+					    Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY).build((Activity)v.getContext());
+					    startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
+					    v.clearFocus();
+				    } catch (GooglePlayServicesRepairableException e) {
+					    // TODO: Handle the error.
+				    } catch (GooglePlayServicesNotAvailableException e) {
+					    e.printStackTrace();
+				    }
+			    }
+		    }
+	    });
+	    super.onStart();
     }
 
 
@@ -200,6 +226,25 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
+        }   //Activity Result for the AutoCompletePlaceResult
+        else if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+	        if (resultCode == RESULT_OK) {
+		        place = PlaceAutocomplete.getPlace(this, data);
+
+		        loc = place.getLatLng();
+
+		        TextView textView = (TextView) findViewById(R.id.add_new_friend_details_address_edit_text);
+		        textView.setText(place.getAddress());
+
+		        Log.i("Place", "Place: " + place.getName());
+	        } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+		        Status status = PlaceAutocomplete.getStatus(this, data);
+		        Log.i("Place", status.getStatusMessage());
+
+	        } else if (resultCode == RESULT_CANCELED) {
+		        // The user canceled the operation.
+	        }
         }
 
 //        If we selected an image
@@ -227,6 +272,7 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
         EditText mobileNumberText = (EditText) findViewById(R.id.add_new_friend_details_mobile_number_edit_text);
         EditText emailAddressText = (EditText) findViewById(R.id.add_new_friend_details_email_edit_text);
         EditText addressText = (EditText) findViewById(R.id.add_new_friend_details_address_edit_text);
+//	    TextView addressText = (TextView) findViewById(R.id.add_new_friend_details_address);
 
         String firstName = firstNameText.getText().toString();
         String lastName = lastNameText.getText().toString();
@@ -247,7 +293,8 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
                 mobileNumber,
                 emailAddress,
                 address,
-		        imagePath);
+		        imagePath,
+		        loc);
 
         //Adds the friend to the database
         getHelper().getFriendDataDao().create(friend);

@@ -28,18 +28,30 @@ public class Friend {
     private String address;
     @DatabaseField(canBeNull = false)
     private String imagePath;
+	@DatabaseField
+	private double lat;
+	@DatabaseField
+	private double lng;
 
     public Friend() {
 
     }
 
-    public Friend(String firstName, String lastName, String mobileNumber, String emailAddress, String address, String imagePath) {
+    public Friend(String firstName, String lastName, String mobileNumber, String emailAddress, String address, String imagePath, LatLng loc) {
         this.firstName = firstName != null ? firstName : "";
         this.lastName = lastName != null ? lastName : "";
         this.mobileNumber = mobileNumber != null ? mobileNumber : "";
         this.emailAddress = emailAddress != null ? emailAddress : "";
         this.address = address != null ? address : "";
         this.imagePath = imagePath != null ? imagePath : "";
+
+	    if (loc == null) {
+		    lat = 0;
+		    lng = 0;
+	    } else {
+		    lat = loc.latitude;
+		    lng = loc.longitude;
+	    }
     }
 
 
@@ -98,6 +110,22 @@ public class Friend {
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
     }
+
+	public double getLat() {
+		return lat;
+	}
+
+	public void setLat(double lat) {
+		this.lat = lat;
+	}
+
+	public double getLng() {
+		return lng;
+	}
+
+	public void setLng(double lng) {
+		this.lng = lng;
+	}
 
 	public boolean isEmpty() {
         return mobileNumber.isEmpty() && emailAddress.isEmpty() && address.isEmpty();

@@ -2,16 +2,11 @@ package bcr6.uow.comp548.assignment2.fragments;
 
 import android.os.Bundle;
 import android.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
-import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 
 import bcr6.uow.comp548.assignment2.R;
 import bcr6.uow.comp548.assignment2.activities.AddNewFriend;

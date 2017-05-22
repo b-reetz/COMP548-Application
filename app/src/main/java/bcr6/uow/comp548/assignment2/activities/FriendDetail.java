@@ -1,7 +1,6 @@
 package bcr6.uow.comp548.assignment2.activities;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -11,7 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.FileProvider;
 import android.support.v7.widget.Toolbar;
@@ -30,31 +29,26 @@ import bcr6.uow.comp548.assignment2.database.DatabaseHelper;
 import bcr6.uow.comp548.assignment2.database.ORMBaseActivity;
 import bcr6.uow.comp548.assignment2.models.Friend;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.util.List;
 
-import ezvcard.Ezvcard;
 import ezvcard.VCard;
 import ezvcard.VCardVersion;
 import ezvcard.io.text.VCardWriter;
 import ezvcard.property.Address;
 import ezvcard.property.StructuredName;
 
-import static android.support.v4.content.FileProvider.getUriForFile;
 import static bcr6.uow.comp548.assignment2.MainActivity.API_LEVEL;
-import static bcr6.uow.comp548.assignment2.PermissionsHelper.checkPermissions;
 import static bcr6.uow.comp548.assignment2.PermissionsHelper.getPermissions;
+import static bcr6.uow.comp548.assignment2.PermissionsHelper.hasPermissions;
 
 
 public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
 
     private static final int ALLOW_FINE_LOCATION_CODE = 1;
     private static final int ALLOW_COARSE_LOCATION_CODE = 2;
+	private static final int REQUEST_COARSE_AND_FIND_LOCATION = 3;
 
 
     private Friend friend;
@@ -258,9 +252,8 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
      * @param view The view that was interacted with
      */
 	public void openMapActivity(View view) {
-        if (API_LEVEL >= 23)
-
-            if (!checkPermissions(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+        if (API_LEVEL >= 23) {
+/*            if (!checkPermissions(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
                     final Activity activity = this;
                     new AlertDialog.Builder(this)
@@ -274,16 +267,40 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
                 } else
                     getPermissions(this, ALLOW_COARSE_LOCATION_CODE, Manifest.permission.ACCESS_COARSE_LOCATION);
             } else
-                startMapActivity();
+                startMapActivity();*/
+/*			if (!checkPermissions(this, Manifest.permission.ACCESS_COARSE_LOCATION) && !checkPermissions(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+				getPermissions(this, ALLOW_COARSE_LOCATION_CODE, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION);
+			} else
+				startMapActivity();*/
+
+			List<String> neededPermissions = hasPermissions(this, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION);
+			//If there are permissions to request
+			if (!neededPermissions.isEmpty()) {
+				getPermissions(this, REQUEST_COARSE_AND_FIND_LOCATION, neededPermissions);
+			} else {
+				startMapActivity();
+			}
+        }
+
 
 	}
 
 
 	@Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
         if (permissions.length > 0 && grantResults.length > 0) { //If the permissions request was not interrupted
-            if (requestCode == ALLOW_COARSE_LOCATION_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startMapActivity();
+
+            if (requestCode == REQUEST_COARSE_AND_FIND_LOCATION) {
+
+				for (int i : grantResults) {
+					if (i == PackageManager.PERMISSION_DENIED) {
+						Toast.makeText(this, "This feature requires the requested permissions. It will not run without them.", Toast.LENGTH_LONG).show();
+						Log.e("Permissions", "Denied permissions, feature is disabled as a result");
+						return;
+					}
+                }
+	            startMapActivity();
             }
         }
     }
@@ -298,6 +315,7 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
      * Exports the contact as a vcf
      */
     private void share() {
+	    //Constructs the VCard object
         VCard vcard = new VCard();
         StructuredName name = new StructuredName();
 
@@ -322,15 +340,15 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
                 Log.e("VCard", "vcf directory either already exists, or it was uanble to be created");
 
             File contactVCF = new File(internalDirectory, fileName);
-	        contactVCF.createNewFile();
 
+	        //write the vcf to file
 	        VCardWriter writer = new VCardWriter(contactVCF, VCardVersion.V3_0);
 	        writer.write(vcard);
 	        writer.close();
 
             Uri contentUri = FileProvider.getUriForFile(this, "bcr6.uow.comp548.assignment2.fileprovider", contactVCF);
-
-            Intent sendIntent = new Intent(Intent.ACTION_SEND);;
+			//create the new intent
+            Intent sendIntent = new Intent(Intent.ACTION_SEND);
             sendIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 	        sendIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
             sendIntent.setType("text/x-vcard");

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.misc.TransactionManager;
 
@@ -55,7 +54,7 @@ public class ImportContacts extends ORMBaseActivity<DatabaseHelper> {
 								try { address += ", " + card.getAddresses().get(0).getCountry(); } catch (Exception e) {}
 
 								//Adds to the database
-								dao.create(new Friend(firstName, lastName, mobile, emailAddress, address, null));
+								dao.create(new Friend(firstName, lastName, mobile, emailAddress, address, null, null));
 								count++;
 							}
 							//If we get here, we finish the transaction and continue on
