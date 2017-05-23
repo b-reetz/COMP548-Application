@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/cardview_dark_background"
-    tools:context="bcr6.uow.comp548.assignment2.fragments.EditFriendContactPictureFragment"
+    tools:context="bcr6.uow.comp548.application.fragments.EditFriendContactPictureFragment"
     android:isScrollContainer="false"
     tools:ignore="Overdraw">
 

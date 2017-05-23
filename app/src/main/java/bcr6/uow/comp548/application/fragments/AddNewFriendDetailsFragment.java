@@ -1,4 +1,4 @@
-package bcr6.uow.comp548.assignment2.fragments;
+package bcr6.uow.comp548.application.fragments;
 
 import android.os.Bundle;
 import android.app.Fragment;
@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import bcr6.uow.comp548.assignment2.R;
+import bcr6.uow.comp548.application.R;
 
 /**
  * A simple {@link Fragment} subclass.

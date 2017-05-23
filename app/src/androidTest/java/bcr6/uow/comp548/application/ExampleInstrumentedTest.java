@@ -1,4 +1,4 @@
-package bcr6.uow.comp548.assignment2;
+package bcr6.uow.comp548.application;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

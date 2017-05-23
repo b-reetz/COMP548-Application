@@ -1,4 +1,4 @@
-package bcr6.uow.comp548.assignment2.fragments;
+package bcr6.uow.comp548.application.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -8,9 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import bcr6.uow.comp548.assignment2.ImageHelper;
-import bcr6.uow.comp548.assignment2.R;
-import bcr6.uow.comp548.assignment2.activities.AddNewFriend;
+import bcr6.uow.comp548.application.ImageHelper;
+import bcr6.uow.comp548.application.R;
+import bcr6.uow.comp548.application.activities.AddNewFriend;
 
 /**
  * A simple {@link Fragment} subclass.

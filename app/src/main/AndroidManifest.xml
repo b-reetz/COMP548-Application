@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="bcr6.uow.comp548.assignment2">
+          package="bcr6.uow.comp548.application">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
@@ -19,7 +19,7 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="bcr6.uow.comp548.assignment2.fileprovider"
+            android:authorities="bcr6.uow.comp548.application.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -41,34 +41,34 @@
         <activity
             android:name=".activities.AddNewFriend"
             android:label="@string/title_activity_add_new_friend"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="bcr6.uow.comp548.application.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
             android:name=".activities.FriendDetail"
             android:label="@string/title_activity_friend_detail"
             android:launchMode="singleTop"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="bcr6.uow.comp548.application.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
             android:name=".activities.Settings"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="bcr6.uow.comp548.application.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="bcr6.uow.comp548.assignment2.MainActivity"/>
+                android:value="bcr6.uow.comp548.application.MainActivity"/>
         </activity>
 
         <activity
             android:name=".activities.EditFriend"
             android:label="@string/title_activity_edit_friend"
-            android:parentActivityName=".activities.FriendDetail"
+            android:parentActivityName="bcr6.uow.comp548.application.activities.FriendDetail"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="bcr6.uow.comp548.assignment2.activities.FriendDetail"/>
+                android:value="bcr6.uow.comp548.application.activities.FriendDetail"/>
         </activity>
 
         <activity android:name=".activities.ImportContacts">
@@ -85,7 +85,7 @@
             android:name=".activities.FriendLocationDetails"
             android:label="@string/title_activity_friend_location_details">
             <meta-data android:name="android.support.PARENT_ACTIVITY"
-                       android:value="bcr6.uow.comp548.assignment2.activities.FriendDetail"/>
+                       android:value="bcr6.uow.comp548.application.activities.FriendDetail"/>
         </activity>
     </application>
 

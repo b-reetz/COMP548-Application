@@ -1,4 +1,4 @@
-package bcr6.uow.comp548.assignment2.activities;
+package bcr6.uow.comp548.application.activities;
 
 import android.Manifest;
 import android.app.Activity;
@@ -30,13 +30,13 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
 
-import bcr6.uow.comp548.assignment2.ImageHelper;
-import bcr6.uow.comp548.assignment2.R;
-import bcr6.uow.comp548.assignment2.database.DatabaseHelper;
-import bcr6.uow.comp548.assignment2.database.ORMBaseActivity;
-import bcr6.uow.comp548.assignment2.fragments.AddNewFriendContactPictureFragment;
-import bcr6.uow.comp548.assignment2.fragments.AddNewFriendDetailsFragment;
-import bcr6.uow.comp548.assignment2.models.Friend;
+import bcr6.uow.comp548.application.ImageHelper;
+import bcr6.uow.comp548.application.R;
+import bcr6.uow.comp548.application.database.DatabaseHelper;
+import bcr6.uow.comp548.application.database.ORMBaseActivity;
+import bcr6.uow.comp548.application.fragments.AddNewFriendContactPictureFragment;
+import bcr6.uow.comp548.application.fragments.AddNewFriendDetailsFragment;
+import bcr6.uow.comp548.application.models.Friend;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -45,9 +45,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
-import static bcr6.uow.comp548.assignment2.MainActivity.API_LEVEL;
-import static bcr6.uow.comp548.assignment2.PermissionsHelper.getPermissions;
-import static bcr6.uow.comp548.assignment2.PermissionsHelper.hasPermissions;
+import static bcr6.uow.comp548.application.MainActivity.API_LEVEL;
+import static bcr6.uow.comp548.application.PermissionsHelper.getPermissions;
+import static bcr6.uow.comp548.application.PermissionsHelper.hasPermissions;
 
 /**
  * Created by Brendan

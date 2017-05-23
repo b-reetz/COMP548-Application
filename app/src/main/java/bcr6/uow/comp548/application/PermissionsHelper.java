@@ -1,4 +1,4 @@
-package bcr6.uow.comp548.assignment2;
+package bcr6.uow.comp548.application;
 
 import android.app.Activity;
 import android.content.Context;

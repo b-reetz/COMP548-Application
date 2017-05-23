@@ -3,6 +3,6 @@
      xmlns:tools="http://schemas.android.com/tools"
      android:layout_width="match_parent"
      android:layout_height="match_parent"
-     tools:context="bcr6.uow.comp548.assignment2.activities.ImportContacts">
+     tools:context="bcr6.uow.comp548.application.activities.ImportContacts">
 
 </android.support.constraint.ConstraintLayout>

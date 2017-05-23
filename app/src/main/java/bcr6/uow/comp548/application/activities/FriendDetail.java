@@ -1,4 +1,4 @@
-package bcr6.uow.comp548.assignment2.activities;
+package bcr6.uow.comp548.application.activities;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -23,11 +23,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import bcr6.uow.comp548.assignment2.ImageHelper;
-import bcr6.uow.comp548.assignment2.R;
-import bcr6.uow.comp548.assignment2.database.DatabaseHelper;
-import bcr6.uow.comp548.assignment2.database.ORMBaseActivity;
-import bcr6.uow.comp548.assignment2.models.Friend;
+import bcr6.uow.comp548.application.ImageHelper;
+import bcr6.uow.comp548.application.R;
+import bcr6.uow.comp548.application.database.DatabaseHelper;
+import bcr6.uow.comp548.application.database.ORMBaseActivity;
+import bcr6.uow.comp548.application.models.Friend;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,9 +39,9 @@ import ezvcard.io.text.VCardWriter;
 import ezvcard.property.Address;
 import ezvcard.property.StructuredName;
 
-import static bcr6.uow.comp548.assignment2.MainActivity.API_LEVEL;
-import static bcr6.uow.comp548.assignment2.PermissionsHelper.getPermissions;
-import static bcr6.uow.comp548.assignment2.PermissionsHelper.hasPermissions;
+import static bcr6.uow.comp548.application.MainActivity.API_LEVEL;
+import static bcr6.uow.comp548.application.PermissionsHelper.getPermissions;
+import static bcr6.uow.comp548.application.PermissionsHelper.hasPermissions;
 
 
 public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {

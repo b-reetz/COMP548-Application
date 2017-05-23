@@ -1,4 +1,4 @@
-package bcr6.uow.comp548.assignment2.fragments;
+package bcr6.uow.comp548.application.fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -19,11 +19,11 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
 
-import bcr6.uow.comp548.assignment2.R;
-import bcr6.uow.comp548.assignment2.models.Friend;
+import bcr6.uow.comp548.application.R;
+import bcr6.uow.comp548.application.models.Friend;
 
 import static android.app.Activity.RESULT_OK;
-import static bcr6.uow.comp548.assignment2.activities.AddNewFriend.PLACE_AUTOCOMPLETE_REQUEST_CODE;
+import static bcr6.uow.comp548.application.activities.AddNewFriend.PLACE_AUTOCOMPLETE_REQUEST_CODE;
 
 /**
  * A simple {@link Fragment} subclass.

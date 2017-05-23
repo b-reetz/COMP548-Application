@@ -1,4 +1,4 @@
-package bcr6.uow.comp548.assignment2.activities;
+package bcr6.uow.comp548.application.activities;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -26,10 +26,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 
-import bcr6.uow.comp548.assignment2.R;
-import bcr6.uow.comp548.assignment2.database.DatabaseHelper;
-import bcr6.uow.comp548.assignment2.database.ORMBaseActivity;
-import bcr6.uow.comp548.assignment2.models.Friend;
+import bcr6.uow.comp548.application.R;
+import bcr6.uow.comp548.application.database.DatabaseHelper;
+import bcr6.uow.comp548.application.database.ORMBaseActivity;
+import bcr6.uow.comp548.application.models.Friend;
 
 public class FriendLocationDetails extends ORMBaseActivity<DatabaseHelper>
 		implements OnMapReadyCallback,

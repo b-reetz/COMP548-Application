@@ -1,4 +1,4 @@
-package bcr6.uow.comp548.assignment2.activities;
+package bcr6.uow.comp548.application.activities;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -20,13 +20,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import bcr6.uow.comp548.assignment2.ImageHelper;
-import bcr6.uow.comp548.assignment2.R;
-import bcr6.uow.comp548.assignment2.database.DatabaseHelper;
-import bcr6.uow.comp548.assignment2.database.ORMBaseActivity;
-import bcr6.uow.comp548.assignment2.fragments.EditFriendContactPictureFragment;
-import bcr6.uow.comp548.assignment2.fragments.EditFriendDetailsFragment;
-import bcr6.uow.comp548.assignment2.models.Friend;
+import bcr6.uow.comp548.application.ImageHelper;
+import bcr6.uow.comp548.application.R;
+import bcr6.uow.comp548.application.database.DatabaseHelper;
+import bcr6.uow.comp548.application.database.ORMBaseActivity;
+import bcr6.uow.comp548.application.fragments.EditFriendContactPictureFragment;
+import bcr6.uow.comp548.application.fragments.EditFriendDetailsFragment;
+import bcr6.uow.comp548.application.models.Friend;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -35,8 +35,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
-import static bcr6.uow.comp548.assignment2.PermissionsHelper.getPermissions;
-import static bcr6.uow.comp548.assignment2.PermissionsHelper.hasPermissions;
+import static bcr6.uow.comp548.application.PermissionsHelper.getPermissions;
+import static bcr6.uow.comp548.application.PermissionsHelper.hasPermissions;
 
 /**
  * Created by Brendan

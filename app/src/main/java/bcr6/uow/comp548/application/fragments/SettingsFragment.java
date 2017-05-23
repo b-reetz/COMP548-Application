@@ -1,9 +1,9 @@
-package bcr6.uow.comp548.assignment2.fragments;
+package bcr6.uow.comp548.application.fragments;
 
 import android.preference.PreferenceFragment;
 import android.os.Bundle;
 
-import bcr6.uow.comp548.assignment2.R;
+import bcr6.uow.comp548.application.R;
 
 /**
  * A placeholder fragment containing a simple view.

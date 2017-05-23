@@ -1,11 +1,11 @@
-package bcr6.uow.comp548.assignment2.activities;
+package bcr6.uow.comp548.application.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.widget.Toolbar;
 
-import bcr6.uow.comp548.assignment2.R;
+import bcr6.uow.comp548.application.R;
 
 public class Settings extends Activity {
 
