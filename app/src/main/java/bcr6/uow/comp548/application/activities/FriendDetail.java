@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -282,9 +283,25 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
     }
 
     private void startMapActivity() {
-        Intent intent = new Intent(this, FriendLocationDetails.class);
-        intent.putExtra("friendID", friend.getId());
-        startActivity(intent);
+	    LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+	    if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER) || lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+		    Intent intent = new Intent(this, FriendLocationDetails.class);
+		    intent.putExtra("friendID", friend.getId());
+		    startActivity(intent);
+	    } else {
+		    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		    builder.setMessage("You need to turn on location services for this feature to work")
+				    .setTitle("Location Services")
+				    .setPositiveButton("Location services settings", new DialogInterface.OnClickListener() {
+					    public void onClick(DialogInterface dialog, int id) {
+						    startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+
+					    }}).create().show();
+	    }
+
+
+
     }
 
     /**

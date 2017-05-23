@@ -233,9 +233,6 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
 		        Log.i("Place", status.getStatusMessage());
 
 	        }
-	        /*else if (resultCode == RESULT_CANCELED) {
-		        // The user canceled the operation.
-	        }*/
         }
 
 //        If we selected an image
