@@ -46,8 +46,6 @@ import static bcr6.uow.comp548.assignment2.PermissionsHelper.hasPermissions;
 
 public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
 
-    private static final int ALLOW_FINE_LOCATION_CODE = 1;
-    private static final int ALLOW_COARSE_LOCATION_CODE = 2;
 	private static final int REQUEST_COARSE_AND_FIND_LOCATION = 3;
 
 
@@ -163,15 +161,15 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
 
     private void edit() {
         Intent intent = new Intent(this, EditFriend.class);
-        intent.putExtra("FRIENDID", friend.getId());
+        intent.putExtra("friendID", friend.getId());
         startActivity(intent);
     }
 
     private void populateData() {
         //sets up friend id, or else breaks
         int friendID = 0;
-        if (getIntent().hasExtra("FRIENDID"))
-            friendID = getIntent().getIntExtra("FRIENDID", 0);
+        if (getIntent().hasExtra("friendID"))
+            friendID = getIntent().getIntExtra("friendID", 0);
         if (friendID == 0)
             throw new IllegalArgumentException("No extra was passed through to this activity.. How did we get here?");
 
@@ -251,28 +249,8 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
      *
      * @param view The view that was interacted with
      */
-	public void openMapActivity(View view) {
+	public void openMapActivity(@SuppressWarnings("UnusedParameters") View view) {
         if (API_LEVEL >= 23) {
-/*            if (!checkPermissions(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                    final Activity activity = this;
-                    new AlertDialog.Builder(this)
-                            .setMessage("This feature requires access to your phone's location services to work. Without it, this feature is pointless")
-                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    getPermissions(activity, ALLOW_COARSE_LOCATION_CODE, Manifest.permission.ACCESS_COARSE_LOCATION);
-                                }
-                            }).setNegativeButton(R.string.cancel, null).show();
-                } else
-                    getPermissions(this, ALLOW_COARSE_LOCATION_CODE, Manifest.permission.ACCESS_COARSE_LOCATION);
-            } else
-                startMapActivity();*/
-/*			if (!checkPermissions(this, Manifest.permission.ACCESS_COARSE_LOCATION) && !checkPermissions(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-				getPermissions(this, ALLOW_COARSE_LOCATION_CODE, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION);
-			} else
-				startMapActivity();*/
-
 			List<String> neededPermissions = hasPermissions(this, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION);
 			//If there are permissions to request
 			if (!neededPermissions.isEmpty()) {
@@ -281,8 +259,6 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
 				startMapActivity();
 			}
         }
-
-
 	}
 
 
@@ -337,7 +313,7 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
             String fileName = friend.getName() + ".vcf";
             File internalDirectory = new File(getFilesDir(), "vcf");
             if (!internalDirectory.mkdirs())
-                Log.e("VCard", "vcf directory either already exists, or it was uanble to be created");
+                Log.e("VCard", "vcf directory either already exists, or it was unable to be created");
 
             File contactVCF = new File(internalDirectory, fileName);
 

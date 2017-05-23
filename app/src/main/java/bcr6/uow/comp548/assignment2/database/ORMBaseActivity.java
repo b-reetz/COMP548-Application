@@ -54,6 +54,7 @@ public abstract class ORMBaseActivity<H extends OrmLiteSqliteOpenHelper> extends
     /**
      * Get a connection source for this action.
      */
+    @SuppressWarnings("WeakerAccess")
     public ConnectionSource getConnectionSource() {
         return getHelper().getConnectionSource();
     }

@@ -11,7 +11,7 @@ import android.os.Bundle;
 import android.app.FragmentTransaction;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NavUtils;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -42,8 +43,11 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 import static bcr6.uow.comp548.assignment2.MainActivity.API_LEVEL;
+import static bcr6.uow.comp548.assignment2.PermissionsHelper.getPermissions;
+import static bcr6.uow.comp548.assignment2.PermissionsHelper.hasPermissions;
 
 /**
  * Created by Brendan
@@ -54,14 +58,11 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_SELECT = 2;
-	private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 3;
-    private static final String[] PERMISSIONS_STORAGE = {
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-    };
+	public static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 3;
+	private static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 4;
 
     private String imagePath = "";
 	private String tempPath = "";
-	private Place place;
 	private LatLng loc;
 
     @Override
@@ -87,8 +88,11 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
             fragmentTransaction.replace(R.id.add_new_contact_details_container, detailsFragment, "TAG");
             fragmentTransaction.commit();
 
-        } else if (savedInstanceState.containsKey("IMAGE"))
-            imagePath = savedInstanceState.getString("IMAGE");
+        } else if (savedInstanceState.containsKey("image")) {
+	        imagePath = savedInstanceState.getString("image");
+	        tempPath = savedInstanceState.getString("tempPath");
+        }
+
     }
 
     @Override
@@ -103,8 +107,9 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
 					    startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
 					    v.clearFocus();
 				    } catch (GooglePlayServicesRepairableException e) {
-					    // TODO: Handle the error.
+					    e.printStackTrace();
 				    } catch (GooglePlayServicesNotAvailableException e) {
+					    Toast.makeText(v.getContext(), "Unable to contact Google", Toast.LENGTH_LONG).show();
 					    e.printStackTrace();
 				    }
 			    }
@@ -120,7 +125,8 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
      */
     @Override
     public void onSaveInstanceState(Bundle out) {
-        out.putString("IMAGE", imagePath);
+        out.putString("image", imagePath);
+	    out.putString("tempPath", tempPath);
         super.onSaveInstanceState(out);
     }
 
@@ -131,33 +137,16 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
     @Override
     public void onFragmentInteraction() {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        final String[] items = getResources().getStringArray(imagePath.isEmpty() ? R.array.no_photo : R.array.new_photo);
-        builder.setTitle("Change photo")
-                .setItems(items, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (items[which]) {
-                            case "Take Photo":
-                            case "Take new photo":
-                                takePhoto();
-                                break;
-                            case "Select new photo":
-                            case "Choose photo":
-                                choosePhoto();
-                                break;
-                            case "Remove photo":
-                                removePhoto();
-                                break;
-                        }
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //Mandatory onClick override. Don't need to do anything here
-                    }
-                }).create().show();
+	    if (API_LEVEL >= 23) {
+		    List<String> neededPermissions = hasPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+		    //If there are permissions to request
+		    if (!neededPermissions.isEmpty()) {
+			    getPermissions(this, WRITE_EXTERNAL_STORAGE_REQUEST_CODE, neededPermissions);
+		    } else {
+			    photoDialog();
+		    }
+	    }
+
     }
 
     /**
@@ -201,8 +190,9 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
         super.onActivityResult(requestCode, resultCode, data);
 
         //If we just took a photo
-        if (requestCode == REQUEST_IMAGE_CAPTURE || requestCode == REQUEST_IMAGE_SELECT && resultCode == RESULT_OK) { //RESULT_OK = -1
+        if ((requestCode == REQUEST_IMAGE_CAPTURE || requestCode == REQUEST_IMAGE_SELECT) && resultCode == RESULT_OK) { //RESULT_OK = -1
             try {
+	            data.getData();
                 InputStream is;
                 if (requestCode == REQUEST_IMAGE_CAPTURE)
                     is = new FileInputStream(new File(tempPath));
@@ -230,7 +220,7 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
         }   //Activity Result for the AutoCompletePlaceResult
         else if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
 	        if (resultCode == RESULT_OK) {
-		        place = PlaceAutocomplete.getPlace(this, data);
+		        Place place = PlaceAutocomplete.getPlace(this, data);
 
 		        loc = place.getLatLng();
 
@@ -242,9 +232,10 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
 		        Status status = PlaceAutocomplete.getStatus(this, data);
 		        Log.i("Place", status.getStatusMessage());
 
-	        } else if (resultCode == RESULT_CANCELED) {
-		        // The user canceled the operation.
 	        }
+	        /*else if (resultCode == RESULT_CANCELED) {
+		        // The user canceled the operation.
+	        }*/
         }
 
 //        If we selected an image
@@ -254,13 +245,30 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
             iV.setScaleType(ImageView.ScaleType.CENTER_CROP);
             int height = iV.getHeight();
             int width = iV.getWidth();
-            if (width == 0)
-                width = 300;
-            if (height == 0)
-                height = 300;
+            if (width == 0) width = 300;
+            if (height == 0) height = 300;
             iV.setImageBitmap(ImageHelper.bitmapSmaller(imagePath, width, height));
         }
     }
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+		if (permissions.length > 0 && grantResults.length > 0) { //If the permissions request was not interrupted
+
+			if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
+
+				for (int i : grantResults) {
+					if (i == PackageManager.PERMISSION_DENIED) {
+						Toast.makeText(this, "This feature requires the requested permissions. It will not run without them.", Toast.LENGTH_LONG).show();
+						Log.e("Permissions", "Denied permissions, feature is disabled as a result");
+						return;
+					}
+				}
+				photoDialog();
+			}
+		}
+	}
 
     /**
      * Adds a friend to the database
@@ -272,7 +280,7 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
         EditText mobileNumberText = (EditText) findViewById(R.id.add_new_friend_details_mobile_number_edit_text);
         EditText emailAddressText = (EditText) findViewById(R.id.add_new_friend_details_email_edit_text);
         EditText addressText = (EditText) findViewById(R.id.add_new_friend_details_address_edit_text);
-//	    TextView addressText = (TextView) findViewById(R.id.add_new_friend_details_address);
+
 
         String firstName = firstNameText.getText().toString();
         String lastName = lastNameText.getText().toString();
@@ -302,25 +310,44 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
         return true;
     }
 
-    public void setPlace(Place place) {
-	    this.place = place;
+    private void photoDialog() {
+	    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+	    final String[] items = getResources().getStringArray(imagePath.isEmpty() ? R.array.no_photo : R.array.new_photo);
+	    builder.setTitle("Change photo")
+			    .setItems(items, new DialogInterface.OnClickListener() {
+				    @Override
+				    public void onClick(DialogInterface dialog, int which) {
+					    switch (items[which]) {
+						    case "Take Photo":
+						    case "Take new photo":
+							    takePhoto();
+							    break;
+						    case "Select new photo":
+						    case "Choose photo":
+							    choosePhoto();
+							    break;
+						    case "Remove photo":
+							    removePhoto();
+							    break;
+					    }
+				    }
+			    })
+			    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+				    @Override
+				    public void onClick(DialogInterface dialog, int which) {
+					    //Mandatory onClick override. Don't need to do anything here
+				    }
+			    }).create().show();
     }
 
     /**
      * Let's you choose a photo from the gallery to use as the contact photo
      */
     private void choosePhoto() {
-        if (API_LEVEL >= 23)
-            if (checkPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                getPermissions(PERMISSIONS_STORAGE);
-                return;
-            }
-
         Intent intent = new Intent(
-                Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+		        Intent.ACTION_PICK,
+		        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         );
-
         startActivityForResult(intent, REQUEST_IMAGE_SELECT);
     }
 
@@ -328,13 +355,6 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
      * Uses the phone's camera to take a photo
      */
     private void takePhoto() {
-        //If we need to check permissions
-        if (API_LEVEL >= 23) {
-            if (checkPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                getPermissions(PERMISSIONS_STORAGE);
-                return;
-            }
-        }
 //        Creates an empty temporary file in public directory Pictures/Friends, and then calls camera to take a photo
         if (this.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -361,27 +381,12 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
                 }
 
             }
+        } else {
+	        Toast.makeText(this, "There is no camera on this device", Toast.LENGTH_LONG).show();
+	        throw new UnsupportedOperationException("There is no camera to use");
         }
     }
 
-    /**
-     * Returns whether the user has access to this particular permission
-     * @param activity The activity requesting this permission
-     * @param permission The particular permission to look in to
-     * @return True if the activity DOESN't have the permission, True if not
-     */
-    private boolean checkPermissions(Activity activity, String permission) {
-        return ActivityCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED;
-    }
-
-
-    /**
-     * Requests permissions from the user.
-     * @param permissions The list of permissions to request from the user
-     */
-    private void getPermissions(String[] permissions) {
-        ActivityCompat.requestPermissions(this, permissions, 1);
-    }
 
     /**
      * Removes the user's photo and sets it back to the default one

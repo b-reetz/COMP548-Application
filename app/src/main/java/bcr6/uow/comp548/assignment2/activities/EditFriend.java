@@ -1,7 +1,6 @@
 package bcr6.uow.comp548.assignment2.activities;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
@@ -11,7 +10,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -20,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import bcr6.uow.comp548.assignment2.ImageHelper;
 import bcr6.uow.comp548.assignment2.R;
@@ -34,6 +33,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
+
+import static bcr6.uow.comp548.assignment2.PermissionsHelper.getPermissions;
+import static bcr6.uow.comp548.assignment2.PermissionsHelper.hasPermissions;
 
 /**
  * Created by Brendan
@@ -45,12 +48,11 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_SELECT = 2;
     private static final int API_LEVEL = android.os.Build.VERSION.SDK_INT;
-    private static final String[] PERMISSIONS_STORAGE = {
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-    };
+	private static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 3;
 
     private EditFriendContactPictureFragment pictureFragment;
     private EditFriendDetailsFragment detailsFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +75,7 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
 
             Log.d("t", "Building picture fragment");
 
-            int friendID = getIntent().getIntExtra("FRIENDID", 0);
+            int friendID = getIntent().getIntExtra("friendID", 0);
             if (friendID == 0)
                 throw new IllegalArgumentException("No friend ID passed in to the activity");
 
@@ -112,34 +114,16 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
      */
     @Override
     public void onFragmentInteraction() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        final String[] items = getResources().getStringArray(pictureFragment.getImagePath().isEmpty() ? R.array.no_photo : R.array.new_photo);
-        builder.setTitle("Change photo")
-                .setItems(items, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (items[which]) {
-                            case "Take Photo":
-                            case "Take new photo":
-                                takePhoto();
-                                break;
-                            case "Select new photo":
-                            case "Choose photo":
-                                choosePhoto();
-                                break;
-                            case "Remove photo":
-                                removePhoto();
-                                break;
 
-                        }
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //Mandatory onClick override. Don't need to do anything here
-                    }
-                }).create().show();
+	    if (API_LEVEL >= 23) {
+		    List<String> neededPermissions = hasPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+		    //If there are permissions to request
+		    if (!neededPermissions.isEmpty()) {
+			    getPermissions(this, WRITE_EXTERNAL_STORAGE_REQUEST_CODE, neededPermissions);
+		    } else {
+			    photoDialog();
+		    }
+	    }
 
 
     }
@@ -151,7 +135,6 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //TODO icon is showing up in overflow menu, rather than on toolbar
         getMenuInflater().inflate(R.menu.menu_edit_friend, menu);
         return true;
     }
@@ -216,6 +199,7 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
                 e.printStackTrace();
             }
         }
+
 //        If we selected an image
         if (!pictureFragment.getImagePath().isEmpty()) {
 //        Sets the image as the new select image
@@ -223,9 +207,43 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
             iV.setScaleType(ImageView.ScaleType.CENTER_CROP);
             int height = iV.getHeight();
             int width = iV.getWidth();
+	        if (height == 0) height = 300;
+	        if (width == 0) width = 300;
             iV.setImageBitmap(ImageHelper.bitmapSmaller(pictureFragment.getImagePath(), width, height));
         }
     }
+
+
+	private void photoDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		final String[] items = getResources().getStringArray(pictureFragment.getImagePath().isEmpty() ? R.array.no_photo : R.array.new_photo);
+		builder.setTitle("Change photo")
+				.setItems(items, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						switch (items[which]) {
+							case "Take Photo":
+							case "Take new photo":
+								takePhoto();
+								break;
+							case "Select new photo":
+							case "Choose photo":
+								choosePhoto();
+								break;
+							case "Remove photo":
+								removePhoto();
+								break;
+
+						}
+					}
+				})
+				.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						//Mandatory onClick override. Don't need to do anything here
+					}
+				}).create().show();
+	}
 
     /**
      * Adds a friend to the database
@@ -256,12 +274,6 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
      * Let's you choose a photo from the gallery to use as the contact photo
      */
     private void choosePhoto() {
-        if (API_LEVEL >= 23)
-            if (checkPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                getPermissions(PERMISSIONS_STORAGE);
-                return;
-            }
-
         Intent intent = new Intent(
                 Intent.ACTION_PICK,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI
@@ -274,13 +286,7 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
      * Uses the phone's camera to take a photo
      */
     private void takePhoto() {
-        //If we need to check permissions
-        if (API_LEVEL >= 23) {
-            if (checkPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                getPermissions(PERMISSIONS_STORAGE);
-                return;
-            }
-        }
+
 //        Creates an empty temporary file in public directory Pictures/Friends, and then calls camera to take a photo
         if (this.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -307,26 +313,10 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
                 }
 
             }
+        } else {
+	        Toast.makeText(this, "This device does not have a camera", Toast.LENGTH_LONG).show();
+	        throw new UnsupportedOperationException("No camera to use");
         }
-    }
-
-    /**
-     * Returns whether the user has access to this particular permission
-     * @param activity The activity requesting this permission
-     * @param permission The particular permission to look in to
-     * @return True if the activity DOESN't have the permission, True if not
-     */
-    private boolean checkPermissions(Activity activity, String permission) {
-        return ActivityCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED;
-    }
-
-
-    /**
-     * Requests permissions from the user.
-     * @param permissions The list of permissions to request from the user
-     */
-    private void getPermissions(String[] permissions) {
-        ActivityCompat.requestPermissions(this, permissions, 1);
     }
 
     /**

@@ -1,6 +1,5 @@
 package bcr6.uow.comp548.assignment2.models;
 
-import com.google.android.gms.location.places.Place;
 import com.google.android.gms.maps.model.LatLng;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -125,6 +124,10 @@ public class Friend {
 
 	public void setLng(double lng) {
 		this.lng = lng;
+	}
+
+	public LatLng getLatLng() {
+		return new LatLng(lat, lng);
 	}
 
 	public boolean isEmpty() {

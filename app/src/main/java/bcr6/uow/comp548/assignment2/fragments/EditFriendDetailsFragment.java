@@ -1,14 +1,29 @@
 package bcr6.uow.comp548.assignment2.fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.maps.model.LatLng;
 
 import bcr6.uow.comp548.assignment2.R;
 import bcr6.uow.comp548.assignment2.models.Friend;
+
+import static android.app.Activity.RESULT_OK;
+import static bcr6.uow.comp548.assignment2.activities.AddNewFriend.PLACE_AUTOCOMPLETE_REQUEST_CODE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,6 +34,7 @@ import bcr6.uow.comp548.assignment2.models.Friend;
 public class EditFriendDetailsFragment extends Fragment {
 
     private Friend friend;
+	private LatLng loc;
 
     public EditFriendDetailsFragment() {
         // Required empty public constructor
@@ -49,6 +65,24 @@ public class EditFriendDetailsFragment extends Fragment {
         EditText emailEdit = (EditText) v.findViewById(R.id.edit_friend_details_email_edit_text);
         EditText addressEdit = (EditText) v.findViewById(R.id.edit_friend_details_address_edit_text);
 
+	    addressEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+		    @Override
+		    public void onFocusChange(View v, boolean hasFocus) {
+			    if (hasFocus) {
+				    try {
+					    Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY).build((Activity)v.getContext());
+					    startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
+					    v.clearFocus();
+				    } catch (GooglePlayServicesRepairableException e) {
+					    e.printStackTrace();
+				    } catch (GooglePlayServicesNotAvailableException e) {
+					    Toast.makeText(v.getContext(), "Unable to contact Google", Toast.LENGTH_LONG).show();
+					    e.printStackTrace();
+				    }
+			    }
+		    }
+	    });
+
         firstNameEdit.setText(friend.getFirstName());
         lastNameEdit.setText(friend.getLastName());
         mobileEdit.setText(friend.getMobileNumber());
@@ -58,8 +92,30 @@ public class EditFriendDetailsFragment extends Fragment {
         return v;
     }
 
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+			if (resultCode == RESULT_OK) {
+				Place place = PlaceAutocomplete.getPlace(this.getActivity(), data);
+				loc = place.getLatLng();
+
+				TextView textView = (TextView) this.getActivity().findViewById(R.id.edit_friend_details_address_edit_text);
+				textView.setText(place.getAddress());
+
+				Log.i("Place", "Place: " + place.getName());
+			} else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+				Status status = PlaceAutocomplete.getStatus(this.getActivity(), data);
+				Log.i("Place", status.getStatusMessage());
+
+			}
+		}
+	}
+
     public void setFriend(Friend f) {
         this.friend = f;
+	    loc = f.getLatLng();
     }
 
     public Friend getUpdatedFriend() {
@@ -77,6 +133,8 @@ public class EditFriendDetailsFragment extends Fragment {
             friend.setMobileNumber(mobileEdit.getText().toString());
             friend.setEmailAddress(emailEdit.getText().toString());
             friend.setAddress(addressEdit.getText().toString());
+	        friend.setLat(loc.latitude);
+	        friend.setLng(loc.longitude);
         }
         return friend;
     }

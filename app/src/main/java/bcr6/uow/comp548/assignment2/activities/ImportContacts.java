@@ -18,6 +18,7 @@ import bcr6.uow.comp548.assignment2.database.ORMBaseActivity;
 import bcr6.uow.comp548.assignment2.models.Friend;
 import ezvcard.Ezvcard;
 import ezvcard.VCard;
+import ezvcard.property.Address;
 
 public class ImportContacts extends ORMBaseActivity<DatabaseHelper> {
 
@@ -40,18 +41,27 @@ public class ImportContacts extends ORMBaseActivity<DatabaseHelper> {
 								String lastName;
 								String mobile;
 								String emailAddress;
-								String address;
+								String address = "";
 
 								//Tries to extract the data out of the VCard. If it fails, it makes the value empty
 								try { firstName = card.getStructuredName().getGiven(); } catch (Exception e) { firstName = ""; }
 								try { lastName = card.getStructuredName().getFamily(); } catch (Exception e) { lastName = ""; }
 								try { mobile = card.getTelephoneNumbers().get(0).getText(); } catch (Exception e) { mobile = ""; }
 								try { emailAddress = card.getEmails().get(0).getValue(); } catch (Exception e) { emailAddress = ""; }
-								try { address = card.getAddresses().get(0).getStreetAddress(); } catch (Exception e) { address = ""; }
-								try { address += ", " + card.getAddresses().get(0).getLocality(); } catch (Exception e) {}
-								try { address += ", " + card.getAddresses().get(0).getRegion(); } catch (Exception e) {}
-								try { address += ", " + card.getAddresses().get(0).getPostalCode(); } catch (Exception e) {}
-								try { address += ", " + card.getAddresses().get(0).getCountry(); } catch (Exception e) {}
+
+								Address addressObject = null;
+
+								if (!card.getAddresses().isEmpty())
+									addressObject = card.getAddresses().get(0);
+
+								if (addressObject != null) {
+									if (addressObject.getStreetAddress() != null) address = addressObject.getStreetAddress();
+									if (addressObject.getLocality() != null) address += ", " + addressObject.getLocality();
+									if (addressObject.getRegion() != null) address += ", " + addressObject.getRegion();
+									if (addressObject.getPostalCode() != null) address += ", " + addressObject.getPostalCode();
+									if (addressObject.getCountry() != null) address += ", " + addressObject.getCountry();
+								}
+
 
 								//Adds to the database
 								dao.create(new Friend(firstName, lastName, mobile, emailAddress, address, null, null));

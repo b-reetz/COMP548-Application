@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/friend_location_address"
+        <LinearLayout android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView android:id="@+id/friend_location_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/ic_location_on_black_24dp"
@@ -23,15 +21,24 @@
                 android:ellipsize="end"
                 android:textAppearance="@style/TextAppearance.AppCompat" />
 
-            <fragment
+            <fragment class="com.google.android.gms.maps.MapFragment"
                 android:id="@+id/friend_map"
-                class="com.google.android.gms.maps.MapFragment"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"/>
 
-            <TextView android:id="@+id/latlng"
-                      android:layout_height="wrap_content"
-                      android:layout_width="match_parent"/>
+            <TextView android:id="@+id/latLng"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"/>
+
+            <TextView android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="@string/distance_from_friend"/>
+
+            <TextView android:id="@+id/distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"/>
 
         </LinearLayout>
     </ScrollView>

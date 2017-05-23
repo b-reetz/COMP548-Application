@@ -106,16 +106,5 @@
             android:maxLines="4"
             android:imeOptions="actionNext|flagNoExtractUi"/>
 
-<!--        <TextView android:id="@+id/add_new_friend_details_address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/address_hint"
-            android:textColor="?attr/editTextColor"
-            android:background="?attr/editTextBackground"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:gravity="center_vertical"
-            android:textAppearance="?android:attr/textAppearanceMediumInverse"
-            android:onClick="pickAddress"/>-->
     </LinearLayout>
 </LinearLayout>

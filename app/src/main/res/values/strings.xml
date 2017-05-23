@@ -5,6 +5,7 @@
     <string name="title_activity_friend_detail">FriendDetails</string>
     <string name="application_title">Friends</string>
     <string name="add_new_friend_toolbar_label">Add new friend</string>
+    <string name="action_search">Search</string>
 
 
     <!--THE ADD NEW FRIEND ACTIVITY-->
@@ -19,7 +20,6 @@
     <string name="phone">Phone Number</string>
 
     <string name="cancel">Cancel</string>
-    <string name="ok">OK</string>
 
     <string name="save_new_friend">Save</string>
     <string name="camera_image_white">Take Photo</string>
@@ -43,4 +43,5 @@
 
     <!-- FRIEND DETAIL -->
     <string name="location_details_button">SEE LOCATION DETAILS</string>
+    <string name="distance_from_friend">Distance from your location</string>
 </resources>

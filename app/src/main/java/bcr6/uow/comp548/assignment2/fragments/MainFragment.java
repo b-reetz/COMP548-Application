@@ -86,6 +86,11 @@ public class MainFragment extends Fragment {
         this.friends = friends;
     }
 
+    public void updateContacts(List<Friend> friends) {
+	    if (adapter != null)
+	    	adapter.updateList(friends);
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated

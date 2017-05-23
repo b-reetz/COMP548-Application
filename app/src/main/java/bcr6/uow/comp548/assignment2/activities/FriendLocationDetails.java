@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -40,7 +41,6 @@ public class FriendLocationDetails extends ORMBaseActivity<DatabaseHelper>
 	private GoogleApiClient mGoogleApiClient;
 	private LatLng friendLocation;
 	private LocationRequest mLocationRequest;
-	Location mLastLocation;
 	private double currentLatitude;
 	private double currentLongitude;
 
@@ -80,8 +80,10 @@ public class FriendLocationDetails extends ORMBaseActivity<DatabaseHelper>
 		float[] result = new float[2];
 		Location.distanceBetween(friendLat, friendLng, currLat, currLng, result);
 
-		TextView textView = (TextView) findViewById(R.id.latlng);
-		textView.setText((result[0]) + "");
+		TextView textView = (TextView) findViewById(R.id.distance);
+		String distance = ((int)result[0]) + " meters";
+
+		textView.setText(distance);
 	}
 
 
@@ -130,9 +132,9 @@ public class FriendLocationDetails extends ORMBaseActivity<DatabaseHelper>
 	@Override
 	public void onConnected(Bundle bundle) {
 
-		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+				ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
 			return;
-		}
 		Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
 		if (location == null) {
@@ -169,6 +171,10 @@ public class FriendLocationDetails extends ORMBaseActivity<DatabaseHelper>
 		try {
 
 			addressList = geocoder.getFromLocationName(address, 5);
+			if (addressList.isEmpty()) {
+				Toast.makeText(this, "Unable to find address", Toast.LENGTH_LONG).show();
+				throw new Exception("Unable to find address from Google");
+			}
 			Address location = addressList.get(0);
 			friendLocation = new LatLng(location.getLatitude(), location.getLongitude());
 
@@ -180,7 +186,7 @@ public class FriendLocationDetails extends ORMBaseActivity<DatabaseHelper>
 		}
 	}
 
-	public void populateData() {
+	private void populateData() {
         int friendID;
         String errorMessage = "No extra was passed through to this activity.. How did we get here?";
         if (getIntent().hasExtra("friendID"))

@@ -28,7 +28,7 @@ import static bcr6.uow.comp548.assignment2.activities.Settings.SORT_Z_A;
 
 public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerViewAdapter.FriendViewHolder> implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private final List<Friend> friends;
+    private List<Friend> friends;
     private final OnListFragmentInteractionListener mListener;
 
     public MainRecyclerViewAdapter(List<Friend> friends, OnListFragmentInteractionListener listener) {
@@ -132,4 +132,9 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
                 }
             });
     }
+
+	public void updateList(List<Friend> list){
+		friends = list;
+		notifyDataSetChanged();
+	}
 }

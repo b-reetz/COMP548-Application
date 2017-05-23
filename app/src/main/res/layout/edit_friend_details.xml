@@ -97,12 +97,13 @@
             android:layout_width="@dimen/add_friend_photo_margins"
             android:contentDescription="@string/address"
             android:src="@drawable/ic_location_on_black_24dp"/>
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/edit_friend_details_address_edit_text"
             android:hint="@string/address_hint"
-            android:inputType="textMultiLine"
+            android:inputType="textMultiLine|textCapWords"
             android:maxLines="4"
             android:imeOptions="actionNext|flagNoExtractUi"/>
     </LinearLayout>
