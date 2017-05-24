@@ -1,13 +1,17 @@
 package bcr6.uow.comp548.application.activities;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -19,13 +23,17 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import bcr6.uow.comp548.application.R;
 import bcr6.uow.comp548.application.database.DatabaseHelper;
 import bcr6.uow.comp548.application.database.ORMBaseActivity;
 import bcr6.uow.comp548.application.models.Friend;
+
 
 public class FriendLocationDetails extends ORMBaseActivity<DatabaseHelper>
 		implements OnMapReadyCallback,
@@ -36,9 +44,11 @@ public class FriendLocationDetails extends ORMBaseActivity<DatabaseHelper>
 	private Friend friend;
 	private GoogleApiClient mGoogleApiClient;
 	private LocationRequest mLocationRequest;
-	GoogleMap map;
+	private GoogleMap map;
 	private double currentLatitude;
 	private double currentLongitude;
+	private Polyline line;
+	private Marker currMarker;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,13 +78,16 @@ public class FriendLocationDetails extends ORMBaseActivity<DatabaseHelper>
 		currentLatitude = location.getLatitude();
 		currentLongitude = location.getLongitude();
 
+		updatePolyLine();
 		updateDistance(friend.getLat(), friend.getLng(), currentLatitude, currentLongitude);
-
-		map.addPolyline(new PolylineOptions().add(friend.getLatLng(), new LatLng(currentLatitude, currentLongitude)));
 
 	}
 
 	private void updateDistance(double friendLat, double friendLng, double currLat, double currLng) {
+		if (currMarker == null)
+			currMarker = map.addMarker(new MarkerOptions().position(new LatLng(currLat, currLng)).title("Current location"));
+		currMarker.setPosition(new LatLng(currLat, currLng));
+
 		float[] result = new float[2];
 		Location.distanceBetween(friendLat, friendLng, currLat, currLng, result);
 
@@ -88,6 +101,16 @@ public class FriendLocationDetails extends ORMBaseActivity<DatabaseHelper>
 	@Override
 	public void onResume() {
 		super.onResume();
+
+		LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+		if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+			Toast.makeText(this, "This activity requires the permission to access the device's location", Toast.LENGTH_LONG).show();
+			finish();
+		} else if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER) && !lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+			Toast.makeText(this, "This activity requires location services to be turned on", Toast.LENGTH_LONG).show();
+			finish();
+		}
 		//Now lets connect to the API
 		mGoogleApiClient.connect();
 	}
@@ -143,12 +166,9 @@ public class FriendLocationDetails extends ORMBaseActivity<DatabaseHelper>
 			currentLatitude = location.getLatitude();
 			currentLongitude = location.getLongitude();
 
-			if (currentLatitude != 0 && currentLongitude != 0)
-				map.addMarker(new MarkerOptions().position(new LatLng(currentLatitude, currentLongitude)).title("Current location"));
 
 			updateDistance(friend.getLat(), friend.getLng(), currentLatitude, currentLongitude);
-
-			map.addPolyline(new PolylineOptions().add(friend.getLatLng(), new LatLng(currentLatitude, currentLongitude)));
+			updatePolyLine();
 		}
 	}
 
@@ -169,6 +189,17 @@ public class FriendLocationDetails extends ORMBaseActivity<DatabaseHelper>
 		map.addMarker(new MarkerOptions().position(friend.getLatLng()).title(friend.getAddress()));
 		map.moveCamera(CameraUpdateFactory.newLatLngZoom(friend.getLatLng(), 13));
 
+		updatePolyLine();
+
+	}
+
+	private void updatePolyLine() {
+		if (currentLongitude != 0 && currentLatitude != 0)
+			map.moveCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds.builder().include(friend.getLatLng()).include(new LatLng(currentLatitude, currentLongitude)).build(), 150));
+
+		if (line != null)
+			line.remove();
+		line = map.addPolyline(new PolylineOptions().add(friend.getLatLng(), new LatLng(currentLatitude, currentLongitude)));
 	}
 
 	private void populateData() {
