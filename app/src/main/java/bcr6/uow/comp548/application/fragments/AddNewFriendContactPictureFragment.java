@@ -33,7 +33,6 @@ public class AddNewFriendContactPictureFragment extends Fragment {
      *
      * @return A new instance of fragment AddNewFriendContactPictureFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static AddNewFriendContactPictureFragment newInstance() {
         return new AddNewFriendContactPictureFragment();
     }

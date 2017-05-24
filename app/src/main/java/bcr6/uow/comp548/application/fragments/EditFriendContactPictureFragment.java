@@ -34,7 +34,6 @@ public class EditFriendContactPictureFragment extends Fragment {
      *
      * @return A new instance of fragment AddNewFriendContactPictureFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static EditFriendContactPictureFragment newInstance() {
         EditFriendContactPictureFragment fragment = new EditFriendContactPictureFragment();
         fragment.setArguments(new Bundle());
@@ -95,7 +94,6 @@ public class EditFriendContactPictureFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction();
     }
 

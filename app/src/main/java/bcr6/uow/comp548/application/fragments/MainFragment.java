@@ -35,7 +35,6 @@ public class MainFragment extends Fragment {
     public MainFragment() {
     }
 
-    // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static MainFragment newInstance() {
         MainFragment fragment = new MainFragment();
@@ -102,7 +101,6 @@ public class MainFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onListFragmentInteraction(int id);
     }
 }

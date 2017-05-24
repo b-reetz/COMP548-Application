@@ -2,15 +2,12 @@ package bcr6.uow.comp548.application.activities;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -23,8 +20,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.util.List;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import bcr6.uow.comp548.application.R;
 import bcr6.uow.comp548.application.database.DatabaseHelper;
@@ -39,8 +35,8 @@ public class FriendLocationDetails extends ORMBaseActivity<DatabaseHelper>
 
 	private Friend friend;
 	private GoogleApiClient mGoogleApiClient;
-	private LatLng friendLocation;
 	private LocationRequest mLocationRequest;
+	GoogleMap map;
 	private double currentLatitude;
 	private double currentLongitude;
 
@@ -72,7 +68,9 @@ public class FriendLocationDetails extends ORMBaseActivity<DatabaseHelper>
 		currentLatitude = location.getLatitude();
 		currentLongitude = location.getLongitude();
 
-		updateDistance(friendLocation.latitude, friendLocation.longitude, currentLatitude, currentLongitude);
+		updateDistance(friend.getLat(), friend.getLng(), currentLatitude, currentLongitude);
+
+		map.addPolyline(new PolylineOptions().add(friend.getLatLng(), new LatLng(currentLatitude, currentLongitude)));
 
 	}
 
@@ -145,7 +143,12 @@ public class FriendLocationDetails extends ORMBaseActivity<DatabaseHelper>
 			currentLatitude = location.getLatitude();
 			currentLongitude = location.getLongitude();
 
-			updateDistance(friendLocation.latitude, friendLocation.longitude, currentLatitude, currentLongitude);
+			if (currentLatitude != 0 && currentLongitude != 0)
+				map.addMarker(new MarkerOptions().position(new LatLng(currentLatitude, currentLongitude)).title("Current location"));
+
+			updateDistance(friend.getLat(), friend.getLng(), currentLatitude, currentLongitude);
+
+			map.addPolyline(new PolylineOptions().add(friend.getLatLng(), new LatLng(currentLatitude, currentLongitude)));
 		}
 	}
 
@@ -161,29 +164,11 @@ public class FriendLocationDetails extends ORMBaseActivity<DatabaseHelper>
 	 */
 	@Override
 	public void onMapReady(GoogleMap googleMap) {
+		map = googleMap;
 
-		// Add a marker in Sydney and move the camera
-		String address = friend.getAddress();
-		Geocoder geocoder = new Geocoder(this);
+		map.addMarker(new MarkerOptions().position(friend.getLatLng()).title(friend.getAddress()));
+		map.moveCamera(CameraUpdateFactory.newLatLngZoom(friend.getLatLng(), 13));
 
-		List<Address> addressList;
-
-		try {
-
-			addressList = geocoder.getFromLocationName(address, 5);
-			if (addressList.isEmpty()) {
-				Toast.makeText(this, "Unable to find address", Toast.LENGTH_LONG).show();
-				throw new Exception("Unable to find address from Google");
-			}
-			Address location = addressList.get(0);
-			friendLocation = new LatLng(location.getLatitude(), location.getLongitude());
-
-			googleMap.addMarker(new MarkerOptions().position(friendLocation).title(address));
-			googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(friendLocation, 13));
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	private void populateData() {

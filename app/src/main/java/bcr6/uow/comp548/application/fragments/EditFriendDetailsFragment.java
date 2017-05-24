@@ -46,7 +46,6 @@ public class EditFriendDetailsFragment extends Fragment {
      *
      * @return A new instance of fragment AddNewFriendDetailsFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static EditFriendDetailsFragment newInstance() {
         EditFriendDetailsFragment fragment = new EditFriendDetailsFragment();
         fragment.setArguments(new Bundle());

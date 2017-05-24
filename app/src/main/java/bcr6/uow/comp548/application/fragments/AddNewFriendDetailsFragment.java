@@ -22,7 +22,6 @@ public class AddNewFriendDetailsFragment extends Fragment {
      *
      * @return A new instance of fragment AddNewFriendDetailsFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static AddNewFriendDetailsFragment newInstance() {
         AddNewFriendDetailsFragment fragment = new AddNewFriendDetailsFragment();
         fragment.setArguments(new Bundle());

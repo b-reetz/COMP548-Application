@@ -17,7 +17,6 @@
         android:background="@color/cardview_dark_background"
         android:contentDescription="@string/camera_image_white" />
 
-    <!--TODO make the photo fill out the area-->
     <ImageView
         android:id="@+id/edit_friend_picture_silhouette"
         android:layout_width="match_parent"
