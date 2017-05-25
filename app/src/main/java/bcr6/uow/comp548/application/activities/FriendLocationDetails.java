@@ -3,6 +3,8 @@ package bcr6.uow.comp548.application.activities;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -28,6 +30,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+
+import java.io.IOException;
+import java.util.List;
 
 import bcr6.uow.comp548.application.R;
 import bcr6.uow.comp548.application.database.DatabaseHelper;
@@ -186,8 +191,38 @@ public class FriendLocationDetails extends ORMBaseActivity<DatabaseHelper>
 	public void onMapReady(GoogleMap googleMap) {
 		map = googleMap;
 
-		map.addMarker(new MarkerOptions().position(friend.getLatLng()).title(friend.getAddress()));
-		map.moveCamera(CameraUpdateFactory.newLatLngZoom(friend.getLatLng(), 13));
+		LatLng friendLatLng = friend.getLatLng();
+
+		//If friend has an address in the field but didn't add contact (importing .vcf?)
+		if (!friend.getAddress().isEmpty() && friend.getLatLng() == null) {
+			Geocoder geocoder = new Geocoder(this);
+			try {
+				List<Address> addressList = geocoder.getFromLocationName(friend.getAddress(), 1);
+				//If no address found from imported contact's address field
+				if (addressList.isEmpty()) {
+					Toast.makeText(this, "Unable to resolve address from contact. Please edit the address in the contact", Toast.LENGTH_LONG).show();
+					finish();
+				}
+
+				Address address = addressList.get(0);
+				friend.setLat(address.getLatitude());
+				friend.setLng(address.getLongitude());
+
+				String stringAddress = "";
+
+				for (int i = 0; i < address.getMaxAddressLineIndex(); i++)
+					stringAddress += address.getAddressLine(i);
+
+				friendLatLng = friend.getLatLng();
+				map.addMarker(new MarkerOptions().position(friendLatLng).title(stringAddress));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else
+			map.addMarker(new MarkerOptions().position(friendLatLng).title(friend.getAddress()));
+
+
+		map.moveCamera(CameraUpdateFactory.newLatLngZoom(friendLatLng, 13));
 
 		updatePolyLine();
 

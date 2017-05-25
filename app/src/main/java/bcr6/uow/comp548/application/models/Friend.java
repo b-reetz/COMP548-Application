@@ -127,6 +127,8 @@ public class Friend {
 	}
 
 	public LatLng getLatLng() {
+		if (lat == 0 || lng == 0)
+			return null;
 		return new LatLng(lat, lng);
 	}
 

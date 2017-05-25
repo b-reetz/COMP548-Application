@@ -317,9 +317,7 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
         vcard.setStructuredName(name);
 
         Address address = new Address();
-        String fullAddress = friend.getAddress();
-        String streetAddress = fullAddress.split(",")[0];
-        address.setStreetAddress(streetAddress);
+	    address.setStreetAddress(friend.getAddress());
         vcard.addAddress(address);
 
         vcard.addEmail(friend.getEmailAddress());
