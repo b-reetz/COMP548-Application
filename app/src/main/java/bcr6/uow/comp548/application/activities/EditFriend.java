@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -212,6 +213,25 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
             iV.setImageBitmap(ImageHelper.bitmapSmaller(pictureFragment.getImagePath(), width, height));
         }
     }
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+		if (permissions.length > 0 && grantResults.length > 0) { //If the permissions request was not interrupted
+
+			if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
+
+				for (int i : grantResults) {
+					if (i == PackageManager.PERMISSION_DENIED) {
+						Toast.makeText(this, "This feature requires the requested permissions. It will not run without them.", Toast.LENGTH_LONG).show();
+						Log.e("Permissions", "Denied permission; " +permissions[i] + ". Feature is disabled as a result");
+						return;
+					}
+				}
+				photoDialog();
+			}
+		}
+	}
 
 
 	private void photoDialog() {

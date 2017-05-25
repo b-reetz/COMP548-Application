@@ -258,7 +258,7 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
 				for (int i : grantResults) {
 					if (i == PackageManager.PERMISSION_DENIED) {
 						Toast.makeText(this, "This feature requires the requested permissions. It will not run without them.", Toast.LENGTH_LONG).show();
-						Log.e("Permissions", "Denied permissions, feature is disabled as a result");
+						Log.e("Permissions", "Denied permission; " +permissions[i] + ". Feature is disabled as a result");
 						return;
 					}
 				}
