@@ -132,6 +132,13 @@ public class Friend {
 		return new LatLng(lat, lng);
 	}
 
+	public void setLatLng(LatLng loc) {
+		if (loc != null) {
+			lat = loc.latitude;
+			lng = loc.longitude;
+		}
+	}
+
 	public boolean isEmpty() {
         return mobileNumber.isEmpty() && emailAddress.isEmpty() && address.isEmpty();
 

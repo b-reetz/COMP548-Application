@@ -3,7 +3,6 @@ package bcr6.uow.comp548.application;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
@@ -19,23 +18,9 @@ import java.util.Locale;
 
 public class ImageHelper {
 
-    static void setUpDirectory() throws IOException {
-        String storageDirPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/Friends";
-        File f = new File(storageDirPath);
-        if (!f.exists())
-            if (!f.mkdirs())
-                throw new IOException("Unable to create home directory");
-    }
-
     public static Bitmap bitmapSmaller(String filePath, int reqWidth, int reqHeight) {
         return decodeSampledBitmapFromString(filePath, reqWidth, reqHeight);
     }
-
-// --Commented out by Inspection START (5/4/17 11:53 AM):
-//    public static Bitmap bitmapSmaller(Resources resources, int resID, int reqWidth, int reqHeight) {
-//        return decodeSampledBitmapFromResource(resources, resID, reqWidth, reqHeight);
-//    }
-// --Commented out by Inspection STOP (5/4/17 11:53 AM)
 
     private static int calculateInSampleSize(
             BitmapFactory.Options options, int reqWidth, int reqHeight) {
@@ -79,15 +64,21 @@ public class ImageHelper {
     public static String createImageFile(Activity a) {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
 
-        String imagePath = a.getFilesDir().getAbsolutePath() + "/JPEG_" + timeStamp + ".jpg";
+	    String imageName = "JPEG_" + timeStamp;
+	    File storageDirectory = new File(a.getFilesDir(), "images");
+	    if (!storageDirectory.mkdirs())
+		    Log.e("Image", "Image directory either already exists... or it was unable to be created (uh-oh)");
+
+		File image = null;
         try {
-            if (!new File(imagePath).createNewFile())
-                throw new IOException("Unable to create new image file");
+	        image = File.createTempFile(imageName, ".jpg", storageDirectory);
         } catch (IOException e) {
             e.printStackTrace();
-            Log.d("IMAGE", e.getMessage());
+            Log.d("Image", e.getMessage());
         }
-        return imagePath;
+        if(image != null)
+			return image.getAbsolutePath();
+	    else
+	    	return null;
     }
-
 }

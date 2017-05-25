@@ -9,10 +9,10 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.FragmentTransaction;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.FileProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -39,11 +39,14 @@ import bcr6.uow.comp548.application.fragments.AddNewFriendDetailsFragment;
 import bcr6.uow.comp548.application.models.Friend;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static bcr6.uow.comp548.application.MainActivity.API_LEVEL;
 import static bcr6.uow.comp548.application.PermissionsHelper.getPermissions;
@@ -189,63 +192,66 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        //If we just took a photo
-        if ((requestCode == REQUEST_IMAGE_CAPTURE || requestCode == REQUEST_IMAGE_SELECT) && resultCode == RESULT_OK) { //RESULT_OK = -1
-            try {
-	            data.getData();
-                InputStream is;
-                if (requestCode == REQUEST_IMAGE_CAPTURE)
-                    is = new FileInputStream(new File(tempPath));
-                else
-                    is = getContentResolver().openInputStream(data.getData());
+	    if (resultCode == RESULT_OK) {
 
-                if (is != null) {
-                    imagePath = ImageHelper.createImageFile(this);
-                    OutputStream fos = new FileOutputStream(imagePath);
+		    if (requestCode == REQUEST_IMAGE_CAPTURE)
+			    imagePath = tempPath;
 
-                    byte[] buffer = new byte[65536];
-                    int len;
+		    else if (requestCode == REQUEST_IMAGE_SELECT) {
+			    try {
+				    InputStream is;
+				    is = getContentResolver().openInputStream(data.getData());
 
-                    while ((len = is.read(buffer)) != -1)
-                        fos.write(buffer, 0, len);
+				    if (is != null) {
+					    imagePath = ImageHelper.createImageFile(this);
+					    if (imagePath != null) {
+						    OutputStream fos = new FileOutputStream(imagePath);
 
-                    fos.close();
-                    is.close();
-                }
+						    byte[] buffer = new byte[65536];
+						    int len;
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+						    while ((len = is.read(buffer)) != -1)
+							    fos.write(buffer, 0, len);
 
-        }   //Activity Result for the AutoCompletePlaceResult
-        else if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
-	        if (resultCode == RESULT_OK) {
-		        Place place = PlaceAutocomplete.getPlace(this, data);
+						    fos.close();
+						    is.close();
+					    } else
+						    throw new IOException("Error selecting photo");
+				    }
 
-		        loc = place.getLatLng();
+			    } catch (Exception e) {
+				    e.printStackTrace();
+			    }
+		    } else if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+			    Place place = PlaceAutocomplete.getPlace(this, data);
 
-		        TextView textView = (TextView) findViewById(R.id.add_new_friend_details_address_edit_text);
-		        textView.setText(place.getAddress());
+			    loc = place.getLatLng();
 
-		        Log.i("Place", "Place: " + place.getName());
-	        } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
-		        Status status = PlaceAutocomplete.getStatus(this, data);
-		        Log.i("Place", status.getStatusMessage());
+			    TextView textView = (TextView) findViewById(R.id.add_new_friend_details_address_edit_text);
+			    textView.setText(place.getAddress());
 
-	        }
-        }
+			    Log.i("Place", "Place: " + place.getName());
+		    }
 
-//        If we selected an image
-        if (!imagePath.isEmpty()) {
-//        Sets the image as the new select image
-            ImageView iV = ((ImageView) findViewById(R.id.add_new_friend_picture_silhouette));
-            iV.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            int height = iV.getHeight();
-            int width = iV.getWidth();
-            if (width == 0) width = 300;
-            if (height == 0) height = 300;
-            iV.setImageBitmap(ImageHelper.bitmapSmaller(imagePath, width, height));
-        }
+		    ImageView iV = ((ImageView) findViewById(R.id.add_new_friend_picture_silhouette));
+		    iV.setScaleType(ImageView.ScaleType.CENTER_CROP);
+		    int height = iV.getHeight();
+		    int width = iV.getWidth();
+		    if (width == 0) width = 300;
+		    if (height == 0) height = 300;
+		    iV.setImageBitmap(ImageHelper.bitmapSmaller(imagePath, width, height));
+
+	    } else {
+		    if (requestCode == REQUEST_IMAGE_CAPTURE) {
+			    File f = new File(tempPath);
+			    if (!f.delete())
+				    Log.e("Image", "Unable to delete empty image that we were going to use for the photo");
+		    } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+
+			    Status status = PlaceAutocomplete.getStatus(this, data);
+			    Log.i("Place", status.getStatusMessage());
+		    }
+	    }
     }
 
 	@Override
@@ -352,36 +358,34 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
      * Uses the phone's camera to take a photo
      */
     private void takePhoto() {
-//        Creates an empty temporary file in public directory Pictures/Friends, and then calls camera to take a photo
-        if (this.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+	    if (this.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
 
-            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                //foal-ed public directory
-                File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                        + "/Friends");
-                //TODO change this temporary file thing to go in the app's cache instead
+		    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-                try {
-                    //creates a temp file that gets deleted when app closes (hopefully)
-                    File image = File.createTempFile(
-                            "temp",
-                            ".jpg",
-                            f
-                    );
-                    image.deleteOnExit();
-                    tempPath = image.getAbsolutePath(); //creates a temporary file, saving path in imagePath
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(image));
-                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+		    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+			    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
+			    String fileName = "JPEG_" + timeStamp;
 
-            }
-        } else {
-	        Toast.makeText(this, "There is no camera on this device", Toast.LENGTH_LONG).show();
-	        throw new UnsupportedOperationException("There is no camera to use");
-        }
+			    File internalDirectory = new File(getFilesDir(), "images");
+			    if (!internalDirectory.mkdirs())
+				    Log.e("Image", "Image directory either already exists... or it was unable to be created (uh-oh)");
+
+			    File image = null;
+
+			    try {
+				    image = File.createTempFile(fileName, ".jpg", internalDirectory);
+			    } catch (IOException e) {
+				    e.printStackTrace();
+			    }
+
+			    if (image != null) {
+				    Uri photoURI = FileProvider.getUriForFile(this, "bcr6.uow.comp548.application.fileprovider", image);
+				    tempPath = image.getAbsolutePath(); //creates a temporary file, saving path in imagePath
+				    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+				    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+			    }
+		    }
+	    }
     }
 
 

@@ -8,10 +8,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -30,11 +30,14 @@ import bcr6.uow.comp548.application.fragments.EditFriendDetailsFragment;
 import bcr6.uow.comp548.application.models.Friend;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static bcr6.uow.comp548.application.PermissionsHelper.getPermissions;
 import static bcr6.uow.comp548.application.PermissionsHelper.hasPermissions;
@@ -92,7 +95,6 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
             fragmentTransaction.replace(R.id.edit_contact_details_container, detailsFragment, "DETAILS");
             fragmentTransaction.commit();
         } else if (savedInstanceState.containsKey("SET")) {
-//            imagePath = savedInstanceState.getString("IMAGE");
             pictureFragment = (EditFriendContactPictureFragment) getFragmentManager().findFragmentByTag("PICTURE");
             detailsFragment = (EditFriendDetailsFragment) getFragmentManager().findFragmentByTag("DETAILS");
         }
@@ -170,48 +172,50 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK)
-            pictureFragment.setImagePath(pictureFragment.getTempImagePath());
 
-        //If we just took a photo
-        if ((requestCode == REQUEST_IMAGE_CAPTURE || requestCode == REQUEST_IMAGE_SELECT) && resultCode == RESULT_OK) { //RESULT_OK = -1
-            try {
-                InputStream is;
-                if (requestCode == REQUEST_IMAGE_CAPTURE)
-                    is = new FileInputStream(new File(pictureFragment.getImagePath()));
-                else
-                    is = getContentResolver().openInputStream(data.getData());
+	    if (resultCode == RESULT_OK) {
 
-                if (is != null) {
-                    pictureFragment.setImagePath(ImageHelper.createImageFile(this));
-                    OutputStream fos = new FileOutputStream(pictureFragment.getImagePath());
+		    if (requestCode == REQUEST_IMAGE_CAPTURE)
+			    pictureFragment.setImagePath(pictureFragment.getTempImagePath());
 
-                    byte[] buffer = new byte[65536];
-                    int len;
+		    else if (requestCode == REQUEST_IMAGE_SELECT) {
+			    try {
+				    InputStream is;
+				    is = getContentResolver().openInputStream(data.getData());
 
-                    while ((len = is.read(buffer)) != -1)
-                        fos.write(buffer, 0, len);
+				    if (is != null) {
+					    pictureFragment.setImagePath(ImageHelper.createImageFile(this));
+					    OutputStream fos = new FileOutputStream(pictureFragment.getImagePath());
 
-                    fos.close();
-                    is.close();
-                }
+					    byte[] buffer = new byte[65536];
+					    int len;
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+					    while ((len = is.read(buffer)) != -1)
+						    fos.write(buffer, 0, len);
 
-//        If we selected an image
-        if (!pictureFragment.getImagePath().isEmpty()) {
-//        Sets the image as the new select image
-            ImageView iV = ((ImageView) findViewById(R.id.edit_friend_picture_silhouette));
-            iV.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            int height = iV.getHeight();
-            int width = iV.getWidth();
-	        if (height == 0) height = 300;
-	        if (width == 0) width = 300;
-            iV.setImageBitmap(ImageHelper.bitmapSmaller(pictureFragment.getImagePath(), width, height));
-        }
+					    fos.close();
+					    is.close();
+				    }
+
+			    } catch (Exception e) {
+				    e.printStackTrace();
+			    }
+		    }
+
+		    ImageView iV = ((ImageView) findViewById(R.id.edit_friend_picture_silhouette));
+		    iV.setScaleType(ImageView.ScaleType.CENTER_CROP);
+		    int width = iV.getWidth() == 0 ? 300 : iV.getWidth();
+		    int height = iV.getHeight() == 0 ? 300 : iV.getHeight();
+		    iV.setImageBitmap(ImageHelper.bitmapSmaller(pictureFragment.getImagePath(), width, height));
+
+	    } else {
+		    if (requestCode == REQUEST_IMAGE_CAPTURE) {
+			    File f = new File(pictureFragment.getTempImagePath());
+			    if (!f.delete())
+				    Log.e("Image", "Unable to delete empty image that we were going to use for the photo");
+		    }
+	    }
+
     }
 
 	@Override
@@ -306,37 +310,34 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
      * Uses the phone's camera to take a photo
      */
     private void takePhoto() {
+		if (this.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
 
-//        Creates an empty temporary file in public directory Pictures/Friends, and then calls camera to take a photo
-        if (this.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+			Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                //foal-ed public directory
-                File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                        + "/Friends");
-                //TODO change this temporary file thing to go in the app's cache instead
+			if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+				String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
+				String fileName = "JPEG_" + timeStamp;
 
-                try {
-                    //creates a temp file that gets deleted when app closes (hopefully)
-                    File image = File.createTempFile(
-                            "temp",
-                            ".jpg",
-                            f
-                    );
-                    image.deleteOnExit();
-                    pictureFragment.setTempImagePath(image.getAbsolutePath()); //creates a temporary file, saving path in imagePath
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(image));
-                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+				File internalDirectory = new File(getFilesDir(), "images");
+				if (!internalDirectory.mkdirs())
+					Log.e("Image", "Image directory either already exists... or it was unable to be created (uh-oh)");
 
-            }
-        } else {
-	        Toast.makeText(this, "This device does not have a camera", Toast.LENGTH_LONG).show();
-	        throw new UnsupportedOperationException("No camera to use");
-        }
+				File image = null;
+
+				try {
+					image = File.createTempFile(fileName, ".jpg", internalDirectory);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				if (image != null) {
+					Uri photoURI = FileProvider.getUriForFile(this, "bcr6.uow.comp548.application.fileprovider", image);
+					pictureFragment.setTempImagePath(image.getAbsolutePath()); //creates a temporary file, saving path in imagePath
+					takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+					startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+				}
+			}
+		}
     }
 
     /**

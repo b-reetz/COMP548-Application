@@ -54,13 +54,13 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //If we couldn't set up the directory
+/*        //If we couldn't set up the directory
         try {
             ImageHelper.setUpDirectory();
         } catch (IOException e) {
             e.printStackTrace();
             Log.d("IMAGE", e.getMessage());
-        }
+        }*/
         //Sets the users preferences
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 

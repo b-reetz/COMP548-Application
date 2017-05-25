@@ -132,8 +132,7 @@ public class EditFriendDetailsFragment extends Fragment {
             friend.setMobileNumber(mobileEdit.getText().toString());
             friend.setEmailAddress(emailEdit.getText().toString());
             friend.setAddress(addressEdit.getText().toString());
-	        friend.setLat(loc.latitude);
-	        friend.setLng(loc.longitude);
+	        friend.setLatLng(loc);
         }
         return friend;
     }
