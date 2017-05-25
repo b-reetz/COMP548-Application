@@ -339,7 +339,7 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
 	        writer.write(vcard);
 	        writer.close();
 
-            Uri contentUri = FileProvider.getUriForFile(this, "bcr6.uow.comp548.assignment2.fileprovider", contactVCF);
+            Uri contentUri = FileProvider.getUriForFile(this, "bcr6.uow.comp548.application.fileprovider", contactVCF);
 			//create the new intent
             Intent sendIntent = new Intent(Intent.ACTION_SEND);
             sendIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
