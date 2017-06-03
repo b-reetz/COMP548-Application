@@ -14,7 +14,6 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,7 +28,6 @@ import bcr6.uow.comp548.application.database.ORMBaseActivity;
 import bcr6.uow.comp548.application.fragments.MainFragment;
 import bcr6.uow.comp548.application.models.Friend;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -54,13 +52,7 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-/*        //If we couldn't set up the directory
-        try {
-            ImageHelper.setUpDirectory();
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.d("IMAGE", e.getMessage());
-        }*/
+
         //Sets the users preferences
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 

@@ -64,6 +64,8 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
         holder.contactName.setText(f.getFirstName() +" "+ f.getLastName());
         if (!f.getImagePath().isEmpty())
             holder.contactPhoto.setImageBitmap(ImageHelper.bitmapSmaller(f.getImagePath(), 200, 200));
+	    else
+	    	holder.contactPhoto.setImageResource(R.drawable.ic_person_black_24dp);
 
         holder.item.setOnClickListener(new View.OnClickListener() {
             @Override
