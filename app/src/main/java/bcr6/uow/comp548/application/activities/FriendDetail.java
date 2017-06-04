@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.*;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.FileProvider;
@@ -285,6 +286,7 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
     private void startMapActivity() {
 	    LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
+/*
 	    if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER) || lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
 		    Intent intent = new Intent(this, FriendLocationDetails.class);
 		    intent.putExtra("friendID", friend.getId());
@@ -299,8 +301,22 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
 
 					    }}).create().show();
 	    }
-
-
+*/
+		if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+			Intent intent = new Intent(this, FriendGPSLocationDetails.class);
+			intent.putExtra("friendID", friend.getId());
+			startActivity(intent);
+		} else {
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage("GPS needs to be active for this to work")
+					.setTitle("GPS Service")
+					.setPositiveButton("Location services settings", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+						}
+					}).create().show();
+		}
 
     }
 
