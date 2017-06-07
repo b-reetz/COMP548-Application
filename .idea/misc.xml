@@ -1,33 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="EntryPointsManager">
-    <entry_points version="2.0">
-      <entry_point TYPE="class" FQNAME="com.example.bcr6.assignment1.fragments.AddNewFriendContactPictureFragment" />
-      <entry_point TYPE="class" FQNAME="com.example.bcr6.assignment1.fragments.AddNewFriendDetailsFragment" />
-      <entry_point TYPE="class" FQNAME="com.example.bcr6.assignment1.database.DatabaseHelper" />
-      <entry_point TYPE="implicit.constructor" FQNAME="com.example.bcr6.assignment1.activities.EditFriend" />
-      <entry_point TYPE="method" FQNAME="com.example.bcr6.assignment1.fragments.EditFriendContactPictureFragment EditFriendContactPictureFragment()" />
-      <entry_point TYPE="class" FQNAME="com.example.bcr6.assignment1.fragments.EditFriendContactPictureFragment" />
-      <entry_point TYPE="method" FQNAME="com.example.bcr6.assignment1.fragments.EditFriendDetailsFragment EditFriendDetailsFragment()" />
-      <entry_point TYPE="class" FQNAME="com.example.bcr6.assignment1.fragments.EditFriendDetailsFragment" />
-      <entry_point TYPE="method" FQNAME="com.example.bcr6.assignment1.ExampleInstrumentedTest void useAppContext()" />
-      <entry_point TYPE="implicit.constructor" FQNAME="com.example.bcr6.assignment1.ExampleInstrumentedTest" />
-      <entry_point TYPE="method" FQNAME="com.example.bcr6.assignment1.ExampleUnitTest void addition_isCorrect()" />
-      <entry_point TYPE="implicit.constructor" FQNAME="com.example.bcr6.assignment1.ExampleUnitTest" />
-      <entry_point TYPE="method" FQNAME="com.example.bcr6.assignment1.models.Friend Friend()" />
-      <entry_point TYPE="method" FQNAME="com.example.bcr6.assignment1.models.Friend Friend(java.lang.String firstName, java.lang.String lastName, java.lang.String mobileNumber, java.lang.String emailAddress, java.lang.String address, java.lang.String imagePath)" />
-      <entry_point TYPE="class" FQNAME="com.example.bcr6.assignment1.models.Friend" />
-      <entry_point TYPE="implicit.constructor" FQNAME="com.example.bcr6.assignment1.activities.FriendDetail" />
-      <entry_point TYPE="implicit.constructor" FQNAME="com.example.bcr6.assignment1.ImageHelper" />
-      <entry_point TYPE="implicit.constructor" FQNAME="com.example.bcr6.assignment1.MainActivity" />
-      <entry_point TYPE="method" FQNAME="com.example.bcr6.assignment1.fragments.MainFragment com.example.bcr6.assignment1.fragments.MainFragment newInstance()" />
-      <entry_point TYPE="method" FQNAME="com.example.bcr6.assignment1.fragments.MainFragment MainFragment()" />
-      <entry_point TYPE="class" FQNAME="com.example.bcr6.assignment1.fragments.MainFragment" />
-      <entry_point TYPE="implicit.constructor" FQNAME="com.example.bcr6.assignment1.database.ORMBaseActivity" />
-      <entry_point TYPE="implicit.constructor" FQNAME="com.example.bcr6.assignment1.activities.Settings" />
-      <entry_point TYPE="method" FQNAME="com.example.bcr6.assignment1.fragments.SettingsFragment SettingsFragment()" />
-      <entry_point TYPE="class" FQNAME="com.example.bcr6.assignment1.fragments.SettingsFragment" />
-    </entry_points>
+    <entry_points version="2.0" />
   </component>
   <component name="NullableNotNullManager">
     <option name="myDefaultNullable" value="android.support.annotation.Nullable" />
@@ -53,37 +27,6 @@
       </value>
     </option>
   </component>
-  <component name="ProjectInspectionProfilesVisibleTreeState">
-    <entry key="Project Default">
-      <profile-state>
-        <expanded-state>
-          <State>
-            <id />
-          </State>
-          <State>
-            <id>Groovy</id>
-          </State>
-          <State>
-            <id>Java</id>
-          </State>
-          <State>
-            <id>Numeric issuesJava</id>
-          </State>
-          <State>
-            <id>Threading issuesGroovy</id>
-          </State>
-          <State>
-            <id>Threading issuesJava</id>
-          </State>
-        </expanded-state>
-        <selected-state>
-          <State>
-            <id>Android</id>
-          </State>
-        </selected-state>
-      </profile-state>
-    </entry>
-  </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
     <OptionsSetting value="true" id="Remove" />
@@ -94,10 +37,13 @@
     <ConfirmationsSetting value="0" id="Add" />
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" default="true" assert-keyword="true" jdk-15="true" project-jdk-name="1.8 (1)" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" default="true" assert-keyword="true" jdk-15="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration>$USER_HOME$/.subversion</configuration>
   </component>
 </project>

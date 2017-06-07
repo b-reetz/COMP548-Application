@@ -8,7 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import bcr6.uow.comp548.application.ImageHelper;
+import com.squareup.picasso.Picasso;
+
 import bcr6.uow.comp548.application.R;
 import bcr6.uow.comp548.application.activities.AddNewFriend;
 
@@ -55,7 +56,6 @@ public class AddNewFriendContactPictureFragment extends Fragment {
                 listener.onFragmentInteraction();
             }
         });
-//        this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         return view;
     }
 
@@ -80,8 +80,7 @@ public class AddNewFriendContactPictureFragment extends Fragment {
         if (!imagePath.isEmpty()) {
             ImageView imageView = (ImageView) getActivity().findViewById(R.id.add_new_friend_picture_silhouette);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setImageBitmap(ImageHelper.bitmapSmaller(imagePath,
-                    200, 200));
+            Picasso.with(getActivity()).load("file://"+imagePath).resize(400, 400).into(imageView);
         }
     }
 

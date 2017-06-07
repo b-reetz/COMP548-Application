@@ -7,7 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import bcr6.uow.comp548.application.ImageHelper;
+import com.squareup.picasso.Picasso;
+
 import bcr6.uow.comp548.application.R;
 import bcr6.uow.comp548.application.fragments.MainFragment.OnListFragmentInteractionListener;
 import bcr6.uow.comp548.application.models.Friend;
@@ -63,7 +64,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
         holder.contactID = f.getId();
         holder.contactName.setText(f.getFirstName() +" "+ f.getLastName());
         if (!f.getImagePath().isEmpty())
-            holder.contactPhoto.setImageBitmap(ImageHelper.bitmapSmaller(f.getImagePath(), 200, 200));
+            Picasso.with(holder.contactPhoto.getContext()).load("file://+"+f.getImagePath()).resize(400, 400).noFade().into(holder.contactPhoto);
 	    else
 	    	holder.contactPhoto.setImageResource(R.drawable.ic_person_black_24dp);
 

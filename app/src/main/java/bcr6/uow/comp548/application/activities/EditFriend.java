@@ -21,6 +21,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import bcr6.uow.comp548.application.ImageHelper;
 import bcr6.uow.comp548.application.R;
 import bcr6.uow.comp548.application.database.DatabaseHelper;
@@ -204,9 +206,10 @@ public class EditFriend extends ORMBaseActivity<DatabaseHelper> implements EditF
 
 		    ImageView iV = ((ImageView) findViewById(R.id.edit_friend_picture_silhouette));
 		    iV.setScaleType(ImageView.ScaleType.CENTER_CROP);
-		    int width = iV.getWidth() == 0 ? 300 : iV.getWidth();
+/*		    int width = iV.getWidth() == 0 ? 300 : iV.getWidth();
 		    int height = iV.getHeight() == 0 ? 300 : iV.getHeight();
-		    iV.setImageBitmap(ImageHelper.bitmapSmaller(pictureFragment.getImagePath(), width, height));
+		    iV.setImageBitmap(ImageHelper.bitmapSmaller(pictureFragment.getImagePath(), width, height));*/
+			Picasso.with(this).load("file://"+pictureFragment.getImagePath()).resize(400, 400).into(iV);
 
 	    } else {
 		    if (requestCode == REQUEST_IMAGE_CAPTURE) {
