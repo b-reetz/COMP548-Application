@@ -231,7 +231,7 @@ public class FriendGPSLocationDetails extends ORMBaseActivity<DatabaseHelper>
 			map.addMarker(new MarkerOptions().position(friendLatLng).title(friend.getAddress()));
 
 
-		map.moveCamera(CameraUpdateFactory.newLatLngZoom(friendLatLng, 13));
+//		map.moveCamera(CameraUpdateFactory.newLatLngZoom(friendLatLng, 13));
 
 		updatePolyLine();
 
