@@ -1,4 +1,4 @@
-package bcr6.uow.comp548.application.fragments;
+package bcr6.uow.comp548.application.settings;
 
 import android.preference.PreferenceFragment;
 import android.os.Bundle;

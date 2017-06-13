@@ -1,4 +1,4 @@
-package bcr6.uow.comp548.application;
+package bcr6.uow.comp548.application.main;
 
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -20,25 +20,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import bcr6.uow.comp548.application.activities.AddNewFriend;
-import bcr6.uow.comp548.application.activities.FriendDetail;
-import bcr6.uow.comp548.application.activities.Settings;
+import bcr6.uow.comp548.application.R;
+import bcr6.uow.comp548.application.add_friend.AddNewFriend;
+import bcr6.uow.comp548.application.friend_detail.FriendDetail;
+import bcr6.uow.comp548.application.settings.Settings;
 import bcr6.uow.comp548.application.database.DatabaseHelper;
 import bcr6.uow.comp548.application.database.ORMBaseActivity;
-import bcr6.uow.comp548.application.fragments.MainFragment;
-import bcr6.uow.comp548.application.models.Friend;
+import bcr6.uow.comp548.application.database.models.Friend;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import static bcr6.uow.comp548.application.activities.Settings.SORT_A_Z;
-import static bcr6.uow.comp548.application.activities.Settings.SORT_BY;
-import static bcr6.uow.comp548.application.activities.Settings.SORT_FIRST;
-import static bcr6.uow.comp548.application.activities.Settings.SORT_LAST;
-import static bcr6.uow.comp548.application.activities.Settings.SORT_ORDER;
-import static bcr6.uow.comp548.application.activities.Settings.SORT_Z_A;
+import static bcr6.uow.comp548.application.settings.Settings.SORT_A_Z;
+import static bcr6.uow.comp548.application.settings.Settings.SORT_BY;
+import static bcr6.uow.comp548.application.settings.Settings.SORT_FIRST;
+import static bcr6.uow.comp548.application.settings.Settings.SORT_LAST;
+import static bcr6.uow.comp548.application.settings.Settings.SORT_ORDER;
+import static bcr6.uow.comp548.application.settings.Settings.SORT_Z_A;
 
 public class MainActivity extends ORMBaseActivity<DatabaseHelper>
         implements MainFragment.OnListFragmentInteractionListener,

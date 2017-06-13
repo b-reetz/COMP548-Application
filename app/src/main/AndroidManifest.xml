@@ -28,7 +28,7 @@
         </provider>
 
         <activity
-            android:name=".MainActivity"
+            android:name=".main.MainActivity"
             android:label="@string/application_title"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -39,39 +39,39 @@
         </activity>
 
         <activity
-            android:name=".activities.AddNewFriend"
+            android:name=".add_friend.AddNewFriend"
             android:label="@string/title_activity_add_new_friend"
-            android:parentActivityName="bcr6.uow.comp548.application.MainActivity"
+            android:parentActivityName="bcr6.uow.comp548.application.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.FriendDetail"
+            android:name=".friend_detail.FriendDetail"
             android:label="@string/title_activity_friend_detail"
             android:launchMode="singleTop"
-            android:parentActivityName="bcr6.uow.comp548.application.MainActivity"
+            android:parentActivityName="bcr6.uow.comp548.application.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".activities.Settings"
+            android:name=".settings.Settings"
             android:label="@string/title_activity_settings"
-            android:parentActivityName="bcr6.uow.comp548.application.MainActivity"
+            android:parentActivityName="bcr6.uow.comp548.application.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="bcr6.uow.comp548.application.MainActivity"/>
+                android:value="bcr6.uow.comp548.application.main.MainActivity"/>
         </activity>
 
         <activity
-            android:name=".activities.EditFriend"
+            android:name=".edit_friend.EditFriend"
             android:label="@string/title_activity_edit_friend"
-            android:parentActivityName="bcr6.uow.comp548.application.activities.FriendDetail"
+            android:parentActivityName="bcr6.uow.comp548.application.friend_detail.FriendDetail"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="bcr6.uow.comp548.application.activities.FriendDetail"/>
+                android:value="bcr6.uow.comp548.application.friend_detail.FriendDetail"/>
         </activity>
 
-        <activity android:name=".activities.ImportContacts">
+        <activity android:name=".settings.ImportContacts">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
 
@@ -82,10 +82,10 @@
         </activity>
 
         <activity
-            android:name=".activities.FriendLocationDetails"
+            android:name=".friend_location.FriendLocationDetails"
             android:label="@string/title_activity_friend_location_details">
             <meta-data android:name="android.support.PARENT_ACTIVITY"
-                       android:value="bcr6.uow.comp548.application.activities.FriendDetail"/>
+                       android:value="bcr6.uow.comp548.application.friend_detail.FriendDetail"/>
         </activity>
     </application>
 

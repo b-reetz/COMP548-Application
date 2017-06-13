@@ -1,4 +1,4 @@
-package bcr6.uow.comp548.application.models;
+package bcr6.uow.comp548.application.database.models;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.j256.ormlite.field.DatabaseField;

@@ -1,4 +1,4 @@
-package bcr6.uow.comp548.application.fragments;
+package bcr6.uow.comp548.application.add_friend;
 
 import android.os.Bundle;
 import android.app.Fragment;
@@ -32,7 +32,7 @@ public class AddNewFriendDetailsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-	    return inflater.inflate(R.layout.add_new_friend_details, container, false);
+	    return inflater.inflate(R.layout.add_friend_details, container, false);
     }
 
 }

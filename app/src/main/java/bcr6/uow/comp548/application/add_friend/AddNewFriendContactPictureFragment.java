@@ -1,8 +1,8 @@
-package bcr6.uow.comp548.application.fragments;
+package bcr6.uow.comp548.application.add_friend;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,17 +15,15 @@ import bcr6.uow.comp548.application.R;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link EditFriendContactPictureFragment.OnFragmentInteractionListener} interface
+ * {@link AddNewFriendContactPictureFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link EditFriendContactPictureFragment#newInstance} factory method to
+ * Use the {@link AddNewFriendContactPictureFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EditFriendContactPictureFragment extends Fragment {
+public class AddNewFriendContactPictureFragment extends Fragment {
     private OnFragmentInteractionListener listener;
-    private String imagePath = "";
-    private String tempImagePath = "";
 
-    public EditFriendContactPictureFragment() {
+    public AddNewFriendContactPictureFragment() {
         // Required empty public constructor
     }
 
@@ -35,11 +33,14 @@ public class EditFriendContactPictureFragment extends Fragment {
      *
      * @return A new instance of fragment AddNewFriendContactPictureFragment.
      */
-    public static EditFriendContactPictureFragment newInstance() {
-        EditFriendContactPictureFragment fragment = new EditFriendContactPictureFragment();
-        fragment.setArguments(new Bundle());
-        fragment.setRetainInstance(true);
-        return fragment;
+    public static AddNewFriendContactPictureFragment newInstance() {
+        return new AddNewFriendContactPictureFragment();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
     }
 
     @Override
@@ -47,14 +48,7 @@ public class EditFriendContactPictureFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.edit_friend_picture, container, false);
-
-        if (!imagePath.isEmpty()) {
-            ImageView imageView = (ImageView) view.findViewById(R.id.edit_friend_picture_silhouette);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            Picasso.with(getActivity()).load("file://"+imagePath).resize(400, 400).into(imageView);
-        }
-
+        View view = inflater.inflate(R.layout.add_friend_picture, container, false);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,6 +72,18 @@ public class EditFriendContactPictureFragment extends Fragment {
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        String imagePath = ((AddNewFriend)getActivity()).getImagePath();
+        if (!imagePath.isEmpty()) {
+            ImageView imageView = (ImageView) getActivity().findViewById(R.id.add_new_friend_picture_silhouette);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            Picasso.with(getActivity()).load("file://"+imagePath).resize(400, 400).into(imageView);
+        }
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         listener = null;
@@ -95,34 +101,5 @@ public class EditFriendContactPictureFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction();
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-    }
-
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public String getTempImagePath() {
-        return tempImagePath;
-    }
-
-    public void setTempImagePath(String tempImagePath) {
-        this.tempImagePath = tempImagePath;
-    }
-
-    public void removePhoto() {
-
-
-        if (getView() != null) {
-            ImageView iV = (ImageView) getView().findViewById(R.id.edit_friend_picture_silhouette);
-            if (iV != null) {
-                iV.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                iV.setImageResource(R.drawable.ic_person_white_24dp);
-            }
-        }
-        imagePath = "";
     }
 }

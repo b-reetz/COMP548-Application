@@ -1,4 +1,4 @@
-package bcr6.uow.comp548.application.activities;
+package bcr6.uow.comp548.application.edit_friend;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -27,9 +27,7 @@ import bcr6.uow.comp548.application.ImageHelper;
 import bcr6.uow.comp548.application.R;
 import bcr6.uow.comp548.application.database.DatabaseHelper;
 import bcr6.uow.comp548.application.database.ORMBaseActivity;
-import bcr6.uow.comp548.application.fragments.EditFriendContactPictureFragment;
-import bcr6.uow.comp548.application.fragments.EditFriendDetailsFragment;
-import bcr6.uow.comp548.application.models.Friend;
+import bcr6.uow.comp548.application.database.models.Friend;
 
 import java.io.File;
 import java.io.FileOutputStream;

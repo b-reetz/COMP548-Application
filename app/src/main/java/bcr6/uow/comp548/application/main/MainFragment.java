@@ -1,4 +1,4 @@
-package bcr6.uow.comp548.application.fragments;
+package bcr6.uow.comp548.application.main;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -10,9 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import bcr6.uow.comp548.application.adaptors.MainRecyclerViewAdapter;
 import bcr6.uow.comp548.application.R;
-import bcr6.uow.comp548.application.models.Friend;
+import bcr6.uow.comp548.application.database.models.Friend;
 
 import java.util.List;
 
