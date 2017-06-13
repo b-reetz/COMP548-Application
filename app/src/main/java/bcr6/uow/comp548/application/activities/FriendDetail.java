@@ -24,7 +24,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import bcr6.uow.comp548.application.ImageHelper;
+import com.squareup.picasso.Picasso;
+
 import bcr6.uow.comp548.application.R;
 import bcr6.uow.comp548.application.database.DatabaseHelper;
 import bcr6.uow.comp548.application.database.ORMBaseActivity;
@@ -188,8 +189,8 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
 
         ImageView photoIV = (ImageView) findViewById(R.id.friend_detail_photo);
         if (!friend.getImagePath().isEmpty()) {
-            photoIV.setImageBitmap(ImageHelper.bitmapSmaller(friend.getImagePath(), 300, 300));
-            photoIV.setScaleType(ImageView.ScaleType.CENTER_CROP);
+			photoIV.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            Picasso.with(this).load("file://"+friend.getImagePath()).resize(400, 400).noFade().into(photoIV);
         } else {
             photoIV.setScaleType(ImageView.ScaleType.FIT_CENTER);
             photoIV.setImageResource(R.drawable.ic_person_white_24dp);

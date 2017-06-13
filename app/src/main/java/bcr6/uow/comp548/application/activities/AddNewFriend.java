@@ -29,6 +29,7 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
+import com.squareup.picasso.Picasso;
 
 import bcr6.uow.comp548.application.ImageHelper;
 import bcr6.uow.comp548.application.R;
@@ -194,10 +195,10 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
 
 	    if (resultCode == RESULT_OK) {
 
-		    if (requestCode == REQUEST_IMAGE_CAPTURE)
-			    imagePath = tempPath;
+		    if (requestCode == REQUEST_IMAGE_CAPTURE) {
+				imagePath = tempPath;
 
-		    else if (requestCode == REQUEST_IMAGE_SELECT) {
+			} else if (requestCode == REQUEST_IMAGE_SELECT) {
 			    try {
 				    InputStream is;
 				    is = getContentResolver().openInputStream(data.getData());
@@ -235,11 +236,8 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
 
 		    ImageView iV = ((ImageView) findViewById(R.id.add_new_friend_picture_silhouette));
 		    iV.setScaleType(ImageView.ScaleType.CENTER_CROP);
-		    int height = iV.getHeight();
-		    int width = iV.getWidth();
-		    if (width == 0) width = 300;
-		    if (height == 0) height = 300;
-		    iV.setImageBitmap(ImageHelper.bitmapSmaller(imagePath, width, height));
+			Picasso.with(this).load("file://"+imagePath).resize(400, 400).into(iV);
+
 
 	    } else {
 		    if (requestCode == REQUEST_IMAGE_CAPTURE) {
@@ -248,9 +246,9 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
 				    Log.e("Image", "Unable to delete empty image that we were going to use for the photo");
 		    } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
 
-			    Status status = PlaceAutocomplete.getStatus(this, data);
-			    Log.i("Place", status.getStatusMessage());
-		    }
+				Status status = PlaceAutocomplete.getStatus(this, data);
+				Log.i("Place", status.getStatusMessage());
+			}
 	    }
     }
 

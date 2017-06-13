@@ -8,7 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import bcr6.uow.comp548.application.ImageHelper;
+import com.squareup.picasso.Picasso;
+
 import bcr6.uow.comp548.application.R;
 
 /**
@@ -51,8 +52,7 @@ public class EditFriendContactPictureFragment extends Fragment {
         if (!imagePath.isEmpty()) {
             ImageView imageView = (ImageView) view.findViewById(R.id.edit_friend_picture_silhouette);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setImageBitmap(ImageHelper.bitmapSmaller(imagePath,
-                    200, 200));
+            Picasso.with(getActivity()).load("file://"+imagePath).resize(400, 400).into(imageView);
         }
 
         view.setOnClickListener(new View.OnClickListener() {
