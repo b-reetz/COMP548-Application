@@ -1,4 +1,4 @@
-package bcr6.uow.comp548.application.activities;
+package bcr6.uow.comp548.application.settings;
 
 import android.app.Activity;
 import android.os.Bundle;

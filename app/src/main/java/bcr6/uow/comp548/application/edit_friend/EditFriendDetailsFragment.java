@@ -1,4 +1,4 @@
-package bcr6.uow.comp548.application.fragments;
+package bcr6.uow.comp548.application.edit_friend;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -20,10 +20,10 @@ import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
 
 import bcr6.uow.comp548.application.R;
-import bcr6.uow.comp548.application.models.Friend;
+import bcr6.uow.comp548.application.database.models.Friend;
 
 import static android.app.Activity.RESULT_OK;
-import static bcr6.uow.comp548.application.activities.AddNewFriend.PLACE_AUTOCOMPLETE_REQUEST_CODE;
+import static bcr6.uow.comp548.application.add_friend.AddNewFriend.PLACE_AUTOCOMPLETE_REQUEST_CODE;
 
 /**
  * A simple {@link Fragment} subclass.

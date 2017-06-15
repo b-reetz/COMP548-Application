@@ -1,4 +1,4 @@
-package bcr6.uow.comp548.application.activities;
+package bcr6.uow.comp548.application.add_friend;
 
 import android.Manifest;
 import android.app.Activity;
@@ -35,9 +35,7 @@ import bcr6.uow.comp548.application.ImageHelper;
 import bcr6.uow.comp548.application.R;
 import bcr6.uow.comp548.application.database.DatabaseHelper;
 import bcr6.uow.comp548.application.database.ORMBaseActivity;
-import bcr6.uow.comp548.application.fragments.AddNewFriendContactPictureFragment;
-import bcr6.uow.comp548.application.fragments.AddNewFriendDetailsFragment;
-import bcr6.uow.comp548.application.models.Friend;
+import bcr6.uow.comp548.application.database.models.Friend;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -49,7 +47,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static bcr6.uow.comp548.application.MainActivity.API_LEVEL;
+import static bcr6.uow.comp548.application.main.MainActivity.API_LEVEL;
 import static bcr6.uow.comp548.application.PermissionsHelper.getPermissions;
 import static bcr6.uow.comp548.application.PermissionsHelper.hasPermissions;
 
@@ -72,7 +70,7 @@ public class AddNewFriend extends ORMBaseActivity<DatabaseHelper> implements Add
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_new_friend_activity);
+        setContentView(R.layout.add_friend_activity);
 
         //Sets up the toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar2);

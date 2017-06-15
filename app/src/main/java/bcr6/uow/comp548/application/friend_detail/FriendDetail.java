@@ -1,4 +1,4 @@
-package bcr6.uow.comp548.application.activities;
+package bcr6.uow.comp548.application.friend_detail;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -27,9 +27,11 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import bcr6.uow.comp548.application.R;
+import bcr6.uow.comp548.application.friend_location.FriendLocationDetails;
 import bcr6.uow.comp548.application.database.DatabaseHelper;
 import bcr6.uow.comp548.application.database.ORMBaseActivity;
-import bcr6.uow.comp548.application.models.Friend;
+import bcr6.uow.comp548.application.edit_friend.EditFriend;
+import bcr6.uow.comp548.application.database.models.Friend;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,7 +43,7 @@ import ezvcard.io.text.VCardWriter;
 import ezvcard.property.Address;
 import ezvcard.property.StructuredName;
 
-import static bcr6.uow.comp548.application.MainActivity.API_LEVEL;
+import static bcr6.uow.comp548.application.main.MainActivity.API_LEVEL;
 import static bcr6.uow.comp548.application.PermissionsHelper.getPermissions;
 import static bcr6.uow.comp548.application.PermissionsHelper.hasPermissions;
 

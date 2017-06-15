@@ -1,4 +1,4 @@
-package bcr6.uow.comp548.application.adaptors;
+package bcr6.uow.comp548.application.main;
 
 import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
@@ -10,8 +10,8 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import bcr6.uow.comp548.application.R;
-import bcr6.uow.comp548.application.fragments.MainFragment.OnListFragmentInteractionListener;
-import bcr6.uow.comp548.application.models.Friend;
+import bcr6.uow.comp548.application.main.MainFragment.OnListFragmentInteractionListener;
+import bcr6.uow.comp548.application.database.models.Friend;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -19,12 +19,12 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static bcr6.uow.comp548.application.activities.Settings.SORT_A_Z;
-import static bcr6.uow.comp548.application.activities.Settings.SORT_BY;
-import static bcr6.uow.comp548.application.activities.Settings.SORT_FIRST;
-import static bcr6.uow.comp548.application.activities.Settings.SORT_LAST;
-import static bcr6.uow.comp548.application.activities.Settings.SORT_ORDER;
-import static bcr6.uow.comp548.application.activities.Settings.SORT_Z_A;
+import static bcr6.uow.comp548.application.settings.Settings.SORT_A_Z;
+import static bcr6.uow.comp548.application.settings.Settings.SORT_BY;
+import static bcr6.uow.comp548.application.settings.Settings.SORT_FIRST;
+import static bcr6.uow.comp548.application.settings.Settings.SORT_LAST;
+import static bcr6.uow.comp548.application.settings.Settings.SORT_ORDER;
+import static bcr6.uow.comp548.application.settings.Settings.SORT_Z_A;
 
 
 public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerViewAdapter.FriendViewHolder> implements SharedPreferences.OnSharedPreferenceChangeListener {
