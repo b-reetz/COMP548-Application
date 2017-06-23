@@ -88,10 +88,10 @@
                        android:value="bcr6.uow.comp548.application.friend_detail.FriendDetail"/>
         </activity>
         <activity
-            android:name=".activities.FriendGPSLocationDetails"
+            android:name=".friend_location.FriendGPSLocationDetails"
             android:label="@string/title_activity_friend_location_details">
             <meta-data android:name="android.support.PARENT_ACTIVITY"
-                       android:value="bcr6.uow.comp548.application.activities.FriendDetail"/>
+                       android:value="bcr6.uow.comp548.application.friend_detail.FriendDetail"/>
         </activity>
     </application>
 

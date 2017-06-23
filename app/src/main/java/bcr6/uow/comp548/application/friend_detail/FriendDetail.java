@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import bcr6.uow.comp548.application.R;
+import bcr6.uow.comp548.application.friend_location.FriendGPSLocationDetails;
 import bcr6.uow.comp548.application.friend_location.FriendLocationDetails;
 import bcr6.uow.comp548.application.database.DatabaseHelper;
 import bcr6.uow.comp548.application.database.ORMBaseActivity;
@@ -288,8 +289,7 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
     private void startMapActivity() {
 	    LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-/*
-	    if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER) || lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+/*	    if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER) || lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
 		    Intent intent = new Intent(this, FriendLocationDetails.class);
 		    intent.putExtra("friendID", friend.getId());
 		    startActivity(intent);
@@ -302,8 +302,7 @@ public class FriendDetail extends ORMBaseActivity<DatabaseHelper> {
 						    startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
 
 					    }}).create().show();
-	    }
-*/
+	    }*/
 		if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 			Intent intent = new Intent(this, FriendGPSLocationDetails.class);
 			intent.putExtra("friendID", friend.getId());
